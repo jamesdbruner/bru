@@ -1,0 +1,38 @@
+{
+  "imports": {
+    "@/": "./",
+    "bru": "./deps.ts",
+    "env": "./env.ts",
+    "helpers/": "./helpers/",
+    "stream": "./helpers/openai/stream_response.ts",
+    "openai_init": "./helpers/openai/init.ts",
+    "log": "./helpers/log.ts",
+    // Link to the main module of the openai SDK
+    "openai": "https://deno.land/x/openai@v4.20.1/mod.ts",
+    "openai/": "https://deno.land/x/openai@v4.20.1/",
+    "dax": "https://deno.land/x/dax@0.35.0/mod.ts",
+    "fs": "https://deno.land/std@0.208.0/fs/mod.ts",
+    "dotenv": "https://deno.land/x/dotenv@v3.2.2/mod.ts"
+  },
+  "tasks": {
+    "run": "deno run --allow-read=./modules --allow-run=./modules --allow-env mod.ts --import-map=import_map.json",
+    "new": "deno run --allow-read=modules/create_mod,./.env,.env.defaults,.env.example --allow-write=modules --allow-env --import-map=import_map.json modules/create_mod/mod.ts --template",
+    "list": "deno run --allow-read --allow-run --allow-env helpers/install_tools/list.ts",
+    "install": "deno run --allow-read --allow-run --allow-write --allow-env helpers/install_tools/install.ts;deno task install_cli;deno task list",
+    "uninstall": "deno run --allow-read --allow-run --allow-write --allow-env helpers/install_tools/uninstall.ts;deno task uninstall_cli;deno task list",
+    "install_cli": "deno run --allow-read --allow-env --allow-run helpers/install_tools/install_cli.ts",
+    "uninstall_cli": "deno run --allow-read --allow-env --allow-run helpers/install_tools/uninstall_cli.ts",
+    "cache": "deno cache --lock=deno.lock --lock-write deps.ts",
+    "reload": "deno cache --reload --lock=deno.lock deps.ts",
+    "compile_mac": "deno run --allow-write --allow-read --allow-run=deno --allow-env ./helpers/install_tools/compile.ts --target=x86_64-apple-darwin",
+    "compile_linux": "deno run --allow-write --allow-read --allow-run=deno --allow-env ./helpers/install_tools/compile.ts --target=x86_64-unknown-linux-gnu",
+    "compile_windows": "deno run --allow-write --allow-read --allow-run=deno --allow-env ./helpers/install_tools/compile.ts --target=x86_64-pc-windows-msvc",
+    "compile_mods": "deno task compile_linux && deno task compile_mac && deno task compile_windows"
+  },
+  "fmt": {
+    "options": {
+      "singleQuote": true,
+      "semiColons": false
+    }
+  }
+}
