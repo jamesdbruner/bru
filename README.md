@@ -11,13 +11,13 @@
 
 **bru** is a template for developing and managing cross-platform (MacOs, Linux
 and Windows) [Deno](https://deno.com/) commands and modules, name inspired by
-[homebrew](https://brew.sh/).
+[homebrew](https://brew.sh/)
 
 This repo includes
 [examples](https://github.com/jamesdbruner/bru_test/tree/main/modules) (built
 using [dax](https://github.com/dsherret/dax) and [openai](https://openai.com/))
 showcasing how it could potentially be used, the example modules aren't meant to
-be used for anything serious.
+be used for anything serious
 
 ## Features
 
