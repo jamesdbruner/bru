@@ -1,0 +1,16 @@
+{
+  "imports": {
+    "bru": "./deps.ts",
+    "@/": "./",
+    "log": "./helpers/log.ts",
+    "helpers/": "./helpers/",
+    "stream": "./helpers/openai/stream_response.ts",
+    "openai_init": "./helpers/openai/init.ts",
+    "openai": "https://deno.land/x/openai@v4.20.1/mod.ts",
+    "openai/": "https://deno.land/x/openai@v4.20.1/",
+    "dax": "https://deno.land/x/dax@0.35.0/mod.ts",
+    "fs": "https://deno.land/std@0.208.0/fs/mod.ts",
+    "dotenv": "https://deno.land/x/dotenv@v3.2.2/mod.ts",
+    "env": "./env.ts"
+  }
+}
