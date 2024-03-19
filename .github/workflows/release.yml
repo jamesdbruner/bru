@@ -17,6 +17,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Tag
+        env:
+          VERSION: ${{ steps.version.outputs.version-with-prefix }}
+        run: |
+          git tag ${VERSION} ${GITHUB_SHA}
+          git push origin ${VERSION}
+
       - name: Version
         id: version
         uses: jveldboom/action-conventional-versioning@v1.2.6
@@ -28,13 +35,6 @@ jobs:
         uses: metcalfc/changelog-generator@v4.3.1
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Tag
-        env:
-          VERSION: ${{ steps.version.outputs.version-with-prefix }}
-        run: |
-          git tag ${VERSION} ${GITHUB_SHA}
-          git push origin ${VERSION}
 
       - name: Release
         env:
