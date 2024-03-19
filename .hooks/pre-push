@@ -1,0 +1,4 @@
+#!/bin/sh
+deno lint -q
+deno test tests/ --parallel --allow-read --allow-env -q
+# deno task compile_mods
