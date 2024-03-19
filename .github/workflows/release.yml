@@ -1,0 +1,47 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Version
+        id: version
+        uses: jveldboom/action-conventional-versioning@v1.2.6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@v4.3.1
+        with:
+          myToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag
+        env:
+          VERSION: ${{ steps.version.outputs.version-with-prefix }}
+        run: |
+          git tag ${VERSION} ${GITHUB_SHA}
+          git push origin ${VERSION}
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.version-with-prefix }}" \
+            --generate-notes \
+            --target ${{ github.sha }} \
+            --title "${{ steps.version.outputs.version-with-prefix }}" \
+            --notes "${{ steps.changelog.outputs.changelog }}"
