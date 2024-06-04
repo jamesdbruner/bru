@@ -1,6 +1,5 @@
-import $ from 'dax'
-
 import {
+  $,
   getArgs,
   instance,
   log,
@@ -36,7 +35,7 @@ async function jsdoc(file: string) {
     stream: true,
   }
 
-  log('\n', 'ai')
+  log('\n', { name: 'ai' })
 
   const response = await stream(instance, chatCompletionParams)
 
@@ -79,3 +78,5 @@ export async function main() {
     log('The provided path is neither a file nor a directory.')
   }
 }
+
+main()
