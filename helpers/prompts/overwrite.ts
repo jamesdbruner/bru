@@ -8,13 +8,13 @@
  * @returns {Promise<boolean>} Promise that resolves to a boolean. If true, file should be overwritten. If false, operation should be aborted.
  */
 
-import { $, fs } from 'bru'
+import { $, existsSync } from 'bru'
 
 export default async function promptOverwrite(
   fileName: string,
   message = `File ${fileName} already exists. Overwrite?`,
 ): Promise<boolean> {
-  if (await fs.exists(fileName)) {
+  if (await existsSync(fileName)) {
     const overwrite = await $.confirm(
       message,
       {
