@@ -14,10 +14,11 @@ and Windows) [Deno](https://deno.com/) commands and modules, name inspired by
 [homebrew](https://brew.sh/)
 
 This repo includes
-[examples](https://github.com/jamesdbruner/bru_test/tree/main/modules) (built
-using [dax](https://github.com/dsherret/dax) and [openai](https://openai.com/))
+[examples](https://github.com/jamesdbruner/bru/tree/main/modules) (built using
+[dax](https://github.com/dsherret/dax) and [openai](https://openai.com/))
 showcasing how it could potentially be used, the example modules aren't meant to
-be used for anything serious
+be used for anything serious but rather to showcase what you could do and to
+illustrate ideas you could expand upon
 
 ## Features
 
@@ -134,19 +135,19 @@ module requires. This step is crucial for ensuring your module has the necessary
 permissions when installed and run
 
 ```typescript
-// modules/your_module/perm.ts
+// modules/<your_module>/perm.ts
 export default {
-  read: true,
   write: true,
-  // Add other permissions as needed
+  net: true,
+  // Add others as needed
 }
 ```
 
 Write your module's logic in the mod.ts file
 
 ```typescript
-// modules/your_module/mod.ts
-console.log('Hello from your new module!')
+// modules/<your_module>/mod.ts
+console.log('Hello world')
 ```
 
 ### Installing Modules
