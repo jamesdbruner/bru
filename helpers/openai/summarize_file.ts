@@ -1,4 +1,4 @@
-import { createCompletion, fs, instance, model, OpenAI } from 'bru'
+import { createCompletion, ensureFile, instance, model, OpenAI } from 'bru'
 
 async function summarizeFile(file: string) {
   const content = await Deno.readTextFile(file)
@@ -28,13 +28,13 @@ async function summarizeFile(file: string) {
 
   // Append to summary.json in the specified format
   const summaryPath = `${Deno.cwd()}/summary.json`
-  await fs.ensureFile(summaryPath)
+  await ensureFile(summaryPath)
 
   const existingData = await Deno.readTextFile(summaryPath)
   const summaries = existingData ? JSON.parse(existingData) : []
   summaries.push({ file, response: summaryText })
 
-  await Deno.writeTextFile(summaryPath, JSON.stringify(summaries, null, 2))
+  await Deno.writeTextFileSync(summaryPath, JSON.stringify(summaries, null, 2))
 }
 
 export default summarizeFile

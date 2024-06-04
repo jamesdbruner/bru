@@ -1,6 +1,6 @@
 import $ from 'dax'
-import { fs, log } from 'bru'
-import { DenoPermissionName } from '@/types.ts'
+import { ensureDir, log } from 'bru'
+import type { DenoPermissionName } from '@/types.ts'
 
 // Available Deno permissions
 const denoPermissions: DenoPermissionName[] = [
@@ -33,7 +33,8 @@ async function createPermissionsFile(moduleDirPath: string) {
   // Construct permissions object
   const allowedPermsObj = allowedPermissions.reduce<Record<string, boolean>>(
     (acc, perm) => {
-      acc[denoPermissions[perm]] = true // Set each selected permission to true
+      // Set each selected permission to true
+      acc[denoPermissions[perm]] = true
       return acc
     },
     {},
@@ -48,7 +49,8 @@ async function createPermissionsFile(moduleDirPath: string) {
 
   const deniedPermsObj = deniedPermissions.reduce<Record<string, boolean>>(
     (acc, perm) => {
-      acc[denoPermissions[perm]] = false // Set each selected permission to false
+      // Set each selected permission to false
+      acc[denoPermissions[perm]] = false
       return acc
     },
     {},
@@ -66,7 +68,8 @@ async function createPermissionsFile(moduleDirPath: string) {
   // Construct permissions object
   const optionsObj = selectedOptions.reduce<Record<string, boolean>>(
     (acc, perm) => {
-      acc[moduleOptions[perm]] = true // Set each selected permission to true
+      // Set each selected permission to true
+      acc[moduleOptions[perm]] = true
       return acc
     },
     {},
@@ -80,7 +83,7 @@ export default ${JSON.stringify(permissionsObj, null, 2)} as DenoPermissions;
 export const options = ${JSON.stringify(optionsObj, null, 2)};\n`
 
   // Write to perm.ts in the module directory
-  await Deno.writeTextFile(`${moduleDirPath}/perm.ts`, permFileContent)
+  await Deno.writeTextFileSync(`${moduleDirPath}/perm.ts`, permFileContent)
 }
 
 /**
@@ -95,7 +98,7 @@ async function createDenoJson(path: string, mod: string, version: string) {
   }
 
   // Write the string to deno.json in the module directory
-  await Deno.writeTextFile(
+  await Deno.writeTextFileSync(
     `${path}/deno.json`,
     JSON.stringify(denoJson, null, 2),
   )
@@ -115,7 +118,7 @@ async function main() {
     Deno.args.includes('-t')
   const moduleDirPath = `modules/${moduleName}`
 
-  await fs.ensureDir(moduleDirPath)
+  await ensureDir(moduleDirPath)
   await createPermissionsFile(moduleDirPath)
   await createDenoJson(moduleDirPath, moduleName, '0.1.0')
 
@@ -123,7 +126,7 @@ async function main() {
   if (useTemplate) {
     await Deno.copyFile('modules/create_mod/template.ts', destinationPath)
   } else {
-    await Deno.writeTextFile(destinationPath, '')
+    await Deno.writeTextFileSync(destinationPath, '')
   }
 
   log(`Module ${moduleName} created with selected permissions.`)
