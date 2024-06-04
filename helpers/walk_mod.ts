@@ -1,4 +1,13 @@
-import { $, fs, log } from 'bru'
+/**
+ * Runs a given module and updates the progress bar.
+ *
+ * @param {string} mod - The module to run.
+ * @param {function(string): Promise<void>} run - The function to execute the module.
+ * @param {ProgressBar} pb - The progress bar to update.
+ * @returns {Promise<void>}
+ */
+
+import { $, log, walk } from 'bru'
 import { ProgressBar } from 'dax'
 
 // Function to process a single file and update the progress bar
@@ -8,24 +17,34 @@ export async function runModule(
   pb: ProgressBar,
 ) {
   try {
-    await run(mod) // Run the module
-    pb.increment() // Increment the progress bar after processing each file
+    await run(mod)
+    pb.increment()
   } catch (error) {
     log.error(`Error running ${mod}: ${error}`)
   }
 }
 
-// Function to recursively process files in a directory
+/**
+ * Recursively processes files in a directory.
+ *
+ * @param {string} dir - The directory to walk through.
+ * @param {function(string): Promise<void>} run - The function to execute for each file.
+ * @param {string} [ext='.ts'] - The file extension to filter by.
+ * @param {string[]} [skipFiles=['perm.ts']] - Files to skip during processing.
+ * @param {string} [message=`Walking ${dir}`] - The message to display with the progress bar.
+ * @returns {Promise<void>}
+ */
+
 export async function walkMod(
   dir: string,
   run: (mod: string) => Promise<void>,
   ext = '.ts',
-  skipFiles: string[] = ['perm.ts'], // Array of file paths to skip
+  skipFiles: string[] = ['perm.ts'],
   message = `Walking ${dir}`,
 ) {
-  const files = await collectAllFiles(dir, ext, skipFiles) // Collect all files with the given extension
+  const files = await collectAllFiles(dir, ext, skipFiles)
   const length = files.length - skipFiles.length
-  const pb = $.progress(message, { length }) // Initialize the progress bar
+  const pb = $.progress(message, { length })
 
   await pb.with(async () => {
     for (const file of files) {
@@ -34,6 +53,15 @@ export async function walkMod(
   })
 }
 
+/**
+ * Collects all files in a directory matching the provided extension and excluding specific files.
+ *
+ * @param {string} dir - The directory to search.
+ * @param {string} ext - The file extension to match.
+ * @param {string[]} skipFiles - The files to exclude.
+ * @returns {Promise<string[]>} - A promise that resolves to a list of file paths.
+ */
+
 export async function collectAllFiles(
   dir: string,
   ext: string,
@@ -41,7 +69,7 @@ export async function collectAllFiles(
 ): Promise<string[]> {
   const files: string[] = []
   for await (
-    const entry of fs.walk(dir, {
+    const entry of walk(dir, {
       match: [new RegExp(`.${ext}$`)],
     })
   ) {
