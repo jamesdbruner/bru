@@ -1,4 +1,4 @@
-import { DenoPermissions } from '@/types.ts'
+import type { DenoPermissions, ModOptions } from '@/types.ts'
 
 export default {
   read: true,
@@ -10,4 +10,4 @@ export default {
 export const options = {
   install: true,
   compile: true,
-}
+} as ModOptions
