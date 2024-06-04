@@ -1,4 +1,4 @@
-import { $, fs, log } from 'bru'
+import { $, log, walk } from 'bru'
 
 const formatName = (name: string) =>
   name.replace(/\/mod$/, '').replace(/\.ts$/, '').split('/').pop() || ''
@@ -11,7 +11,7 @@ async function listModules(directory: string): Promise<string[]> {
   const scripts = new Set<string>()
 
   for await (
-    const entry of fs.walk(directory, { exts: ['.ts'], maxDepth: 2 })
+    const entry of walk(directory, { exts: ['.ts'], maxDepth: 2 })
   ) {
     if (entry.isFile) {
       if (entry.name === 'mod.ts' || entry.path.split('/').length === 2) {
