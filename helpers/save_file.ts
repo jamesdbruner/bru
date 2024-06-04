@@ -8,7 +8,7 @@
  * @returns {Promise<void>} Returns a Promise that fulfills when the file is saved or fails with an error.
  */
 
-import { $, fs, log, overwrite } from 'bru'
+import { $, log, overwrite } from 'bru'
 
 async function saveFile(content: string, name?: string) {
   const fileName = name ||
@@ -16,7 +16,7 @@ async function saveFile(content: string, name?: string) {
   const filePath = `${Deno.cwd()}/${fileName}`
 
   // Check if the file exists before confirming overwrite
-  if (await fs.exists(filePath)) {
+  if (await Deno.readFileSync(filePath)) {
     if (!(await overwrite(filePath))) {
       log('Exiting without overwriting the file')
       Deno.exit(1)
@@ -25,7 +25,7 @@ async function saveFile(content: string, name?: string) {
 
   // Write to the file
   try {
-    await Deno.writeTextFile(filePath, content)
+    await Deno.writeTextFileSync(filePath, content)
     log(`Response saved to ${fileName}`)
   } catch (error) {
     log.error(`An error occurred while saving the file: ${error.message}`)
