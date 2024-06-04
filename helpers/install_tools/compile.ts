@@ -8,9 +8,23 @@
  * @module ModuleCompiler
  */
 
-import { DenoPermissions } from '@/types.ts'
-import { $, binDir, fs, getModulePermissions, log, srcDir } from 'bru'
+import type { DenoPermissions } from '@/types.ts'
+import {
+  $,
+  binDir,
+  ensureDir,
+  getModulePermissions,
+  log,
+  srcDir,
+  walk,
+} from 'bru'
 
+/**
+ * Gets a friendly target name based on the provided target string.
+ *
+ * @param {string} target - The target string.
+ * @returns {string} - The friendly target name.
+ */
 function getFriendlyTargetName(target: string): string {
   const targetMap: { [key: string]: string } = {
     'x86_64-apple-darwin': 'macos',
@@ -20,6 +34,15 @@ function getFriendlyTargetName(target: string): string {
   return targetMap[target] || target
 }
 
+/**
+ * Compiles a Deno module with the specified permissions for the target platform.
+ *
+ * @param {string} filePath - The path to the module file.
+ * @param {string} moduleName - The name of the module.
+ * @param {string} target - The target platform.
+ * @param {DenoPermissions} permissions - The permissions required for the module.
+ * @returns {Promise<void>}
+ */
 async function compileModule(
   filePath: string,
   moduleName: string,
@@ -40,34 +63,50 @@ async function compileModule(
   }
 }
 
+/**
+ * Constructs the command arguments for compiling a Deno module.
+ *
+ * @param {string} filePath - The path to the module file.
+ * @param {string} moduleName - The name of the module.
+ * @param {string} target - The target platform.
+ * @param {DenoPermissions} permissions - The permissions required for the module.
+ * @returns {string[]} - The command arguments.
+ */
 function constructDenoCompileCommandArgs(
   filePath: string,
   moduleName: string,
   target: string,
   permissions: DenoPermissions,
 ): string[] {
-  const permissionArgs = Object.entries(permissions).flatMap(
-    ([perm, value]) => {
-      if (Array.isArray(value)) {
-        return value.map((val) => `--allow-${perm}=${val}`)
-      } else if (value) {
-        return [`--allow-${perm}`]
+  const permissionArgs = Object.entries(permissions).reduce(
+    (flags: string[], [perm, allowed]) => {
+      if (allowed) {
+        flags.push(`--allow-${perm}`)
       }
-      return []
+      return flags
     },
+    [],
   )
+
   return [
     ...permissionArgs,
     `--output=${binDir}/${getFriendlyTargetName(target)}/${moduleName}`,
+    `--target=${target}`,
     filePath,
   ]
 }
 
-async function compileModules(target: string) {
-  await fs.ensureDir(binDir)
+/**
+ * Compiles all Deno modules found in the src directory for the specified target platform.
+ *
+ * @param {string} target - The target platform.
+ * @returns {Promise<void>}
+ */
+async function compileModules(target: string): Promise<void> {
+  await ensureDir(binDir)
 
   const modules: string[] = []
-  for await (const entry of fs.walk(srcDir, { maxDepth: 1 })) {
+  for await (const entry of walk(srcDir, { maxDepth: 1 })) {
     if (!entry.isDirectory || entry.name === 'modules') continue
     modules.push(entry.name)
   }
@@ -109,6 +148,7 @@ async function compileModules(target: string) {
 
 const target = Deno.args.find((arg) => arg.startsWith('--target='))
   ?.split('=')[1] ?? ''
+
 await compileModules(target)
 
 log('✓ Compilation complete')
