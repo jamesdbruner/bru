@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import instance from 'openai_init'
+import instance from 'helpers/openai/init.ts'
 import model from 'helpers/openai/model.ts'
 import walkMod from 'helpers/walk_mod.ts'
 import getArgs from '../../helpers/prompts/get_args.ts'
