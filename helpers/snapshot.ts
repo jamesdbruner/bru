@@ -26,8 +26,7 @@
  * @private
  */
 
-import { walk } from 'fs'
-import { relative } from 'https://deno.land/std@0.214.0/path/mod.ts'
+import { relative, walk } from 'bru'
 
 async function snapshot(
   basePath: string,
