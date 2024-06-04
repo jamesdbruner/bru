@@ -6,35 +6,30 @@
  * @module ModuleInstaller
  */
 
-import { $, fs, log } from 'bru'
+import { $, getModulePermissions, log, walk } from 'bru'
 
 const src = './modules'
 const timeout = parseInt(Deno.args[0]) || 10
 
-async function getModulePermissions(
-  permFileURL: URL,
-): Promise<Record<string, string>> {
-  try {
-    const permissionsModule = await import(permFileURL.href)
-    return permissionsModule.default || {}
-  } catch (error) {
-    log.error(
-      `Error reading permissions from ${permFileURL.href}: ${error.message}`,
-    )
-    return {}
-  }
-}
-
+/**
+ * Installs a Deno module with the specified permissions.
+ *
+ * @param {string} name - The name of the module to install.
+ * @param {boolean} [force=false] - Whether to force the installation.
+ * @returns {Promise<string | null>} - A message if installation fails or is skipped, otherwise null.
+ */
 async function install(name: string, force = false): Promise<string | null> {
   const moduleURL = new URL(`../../modules/${name}/mod.ts`, import.meta.url)
   const permFileURL = new URL(`../../modules/${name}/perm.ts`, import.meta.url)
-  const permissions = await getModulePermissions(permFileURL)
+  const permissions = await getModulePermissions(permFileURL.href)
 
-  if (permissions.skipInstall) return `skip ${name}`
+  const modName = permissions.options.name || name
+
+  if (!permissions.options.install) return `skip ${name}`
 
   await new Promise((resolve) => setTimeout(resolve, timeout))
 
-  const permissionFlags = Object.entries(permissions).reduce(
+  const permissionFlags = Object.entries(permissions.default).reduce(
     (flags: string[], [perm, allowed]) => {
       if (allowed) {
         flags.push(`--allow-${perm}`)
@@ -45,27 +40,30 @@ async function install(name: string, force = false): Promise<string | null> {
   )
 
   try {
-    await $`deno install -n ${name} ${permissionFlags} ${
+    await $`deno install -n ${modName} ${permissionFlags} ${
       force ? '-f' : ''
-    } ${moduleURL.href} --import-map=import_map.json`.quiet()
+    } ${moduleURL.href} --import-map=import_map.json -g`.quiet()
     return null
   } catch (error) {
     if (!force) {
-      return install(name, true)
+      return install(modName, true)
     } else {
-      return `Failed to install ${name}: ${error.message}`
+      return `Failed to install ${modName}: ${error.message}`
     }
   }
 }
 
-// The rest of your installMods and supporting functions would remain unchanged.
-
-async function installMods() {
-  const modules = []
-  const errors = []
+/**
+ * Installs all Deno modules found in the src directory.
+ *
+ * @returns {Promise<void>}
+ */
+async function installMods(): Promise<void> {
+  const modules: string[] = []
+  const errors: string[] = []
   const skipped: string[] = []
 
-  for await (const entry of fs.walk(src, { maxDepth: 1 })) {
+  for await (const entry of walk(src, { maxDepth: 1 })) {
     if (!entry.isDirectory || entry.name === 'modules') continue
     modules.push(entry.name)
   }
@@ -92,7 +90,7 @@ async function installMods() {
   }
 
   if (skipped.length > 0) {
-    log(`Skipped modules: ${skipped.map((s) => s.split(', '))}`)
+    log(`Skipped modules: ${skipped.join(', ')}`)
   }
 
   log(

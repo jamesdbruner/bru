@@ -14,7 +14,7 @@ import { $ } from 'bru'
 import { NAME } from 'env'
 
 export async function installMod() {
-  await $`deno install -A --name ${NAME} main.ts --import-map=import_map.json`
+  await $`deno install -A --name ${NAME} main.ts --import-map=import_map.json -g`
 }
 
 installMod()

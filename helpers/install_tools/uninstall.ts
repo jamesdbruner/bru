@@ -1,7 +1,8 @@
-import { $, denoBin, fs, log } from 'bru'
+import { $, denoBin, getModulePermissions, log, walk } from 'bru'
 
 const src = './modules'
-const timeout = parseInt(Deno.args[0]) || 0 // Timeout can be passed as a Deno argument
+// Timeout can be passed as a Deno argument
+const timeout = parseInt(Deno.args[0]) || 0
 
 async function listInstalledModules() {
   const installed = new Set()
@@ -12,11 +13,13 @@ async function listInstalledModules() {
 }
 
 async function uninstall(name: string): Promise<string | null> {
-  await new Promise((resolve) => setTimeout(resolve, timeout)) // Artificial delay
+  // Artificial delay
+  await new Promise((resolve) => setTimeout(resolve, timeout))
 
   try {
-    await $`deno uninstall ${name}`.quiet()
-    return null // Indicates successful uninstallation
+    await $`deno uninstall ${name} -g`.quiet()
+    // Indicates successful uninstallation
+    return null
   } catch (error) {
     return `Failed to uninstall ${name}: ${error.message}`
   }
@@ -24,12 +27,20 @@ async function uninstall(name: string): Promise<string | null> {
 
 async function uninstallAll() {
   const installedModules = await listInstalledModules()
-  const modulesToUninstall = []
-  const errors = []
+  const modulesToUninstall: string[] = []
+  const errors: string[] = []
 
-  for await (const entry of fs.walk(src, { maxDepth: 1 })) {
-    if (entry.isDirectory && installedModules.has(entry.name)) {
-      modulesToUninstall.push(entry.name)
+  for await (const entry of walk(src, { maxDepth: 1 })) {
+    if (!entry.isDirectory || entry.name === 'modules') continue
+    const permFileURL = new URL(
+      `../../modules/${entry.name}/perm.ts`,
+      import.meta.url,
+    )
+    const permissions = await getModulePermissions(permFileURL.href)
+    const moduleName = permissions.options.name || entry.name
+
+    if (installedModules.has(moduleName)) {
+      modulesToUninstall.push(moduleName)
     }
   }
 
