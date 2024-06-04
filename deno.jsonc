@@ -4,8 +4,6 @@
     "bru": "./deps.ts",
     "env": "./env.ts",
     "helpers/": "./helpers/",
-    "stream": "./helpers/openai/stream_response.ts",
-    "openai_init": "./helpers/openai/init.ts",
     "log": "./helpers/log.ts",
     // Link to the main module of the openai SDK
     "openai": "https://deno.land/x/openai@v4.20.1/mod.ts",
@@ -34,5 +32,9 @@
       "singleQuote": true,
       "semiColons": false
     }
+  },
+  "lint": {
+    "include": ["modules/", "helpers/", "main.ts"],
+    "exclude": []
   }
 }
