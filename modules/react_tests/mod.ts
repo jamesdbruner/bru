@@ -1,3 +1,11 @@
+/**
+ * Module for generating unit tests using OpenAI's language model.
+ * The module reads a specified file, detects the language used, and generates unit tests using appropriate frameworks/libraries.
+ * It uses OpenAI's API to generate the initial unit test code and allows for refining the output through a conversational loop.
+ *
+ * @module UnitTestGenerator
+ */
+
 import { chatLoop, instance, log, model, OpenAI, stream } from 'bru'
 
 // Check for file argument

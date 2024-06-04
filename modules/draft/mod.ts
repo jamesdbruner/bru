@@ -1,3 +1,9 @@
+/**
+ * Module for generating MDX documentation, managing caching, and configuring Astro site setup.
+ *
+ * @module DraftModule
+ */
+
 import {
   $,
   addFrontmatter,
@@ -28,6 +34,13 @@ import { writeStarlightConfig } from './starlight_config.ts'
 import type { HashTable } from '@/types.ts'
 import { readConfig, writeConfig } from 'helpers/caching/config.ts'
 
+/**
+ * Generates MDX documentation for a given file using OpenAI's language model.
+ *
+ * @param {string} file - The path to the file to generate documentation for.
+ * @param {string} ext - The file extension to replace with `.md` for the output.
+ * @returns {Promise<void>}
+ */
 async function getModuleMDX(file: string, ext: string) {
   const fileKey = relative(Deno.cwd(), file)
   const cached = await checkHashTable(fileKey)
@@ -161,6 +174,13 @@ async function getModuleMDX(file: string, ext: string) {
   await writeToCache(fileKey, result, '.md')
 }
 
+/**
+ * Processes multiple directories to generate MDX documentation for TypeScript files.
+ *
+ * @param {string[]} dirs - The array of directory paths to process.
+ * @param {string} [ext='.tsx'] - The file extension to filter by.
+ * @returns {Promise<void>}
+ */
 async function processModules(dirs: string[], ext: string = '.tsx') {
   await Promise.all(dirs.map(async (dir) => {
     await walkMod(
@@ -229,6 +249,13 @@ async function copyCachedFiles(
   }
 }
 
+/**
+ * Main function to manage the overall process of generating documentation,
+ * managing cache, and configuring the Astro site.
+ *
+ * @param {string} [cacheRemoveFileName] - The file name to remove from the cache.
+ * @returns {Promise<void>}
+ */
 async function main(cacheRemoveFileName?: string) {
   log(`%cPouring...`, { styles: 'color: green;' })
 

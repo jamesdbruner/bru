@@ -1,3 +1,11 @@
+/**
+ * Module for summarizing TypeScript files and generating a project overview.
+ * The module walks through specified directories, summarizes files, and provides a brief overview.
+ * It uses OpenAI's language model for generating summaries and overviews.
+ *
+ * @module SummaryModule
+ */
+
 import {
   $,
   codeFence,
@@ -18,6 +26,12 @@ export type Summary = {
   response: string
 }
 
+/**
+ * Processes the directories and summarizes TypeScript files within them.
+ *
+ * @param {string[]} dirs - The array of directory paths to process.
+ * @returns {Promise<void>}
+ */
 async function processDirs(dirs: string[]) {
   for (const dir of dirs) {
     await walkMod(
@@ -30,6 +44,11 @@ async function processDirs(dirs: string[]) {
   }
 }
 
+/**
+ * Summarizes the current directory and generates an overview based on file summaries.
+ *
+ * @returns {Promise<void>}
+ */
 async function summarizeDir() {
   const summaryPath = './summary.json'
 
@@ -40,6 +59,11 @@ async function summarizeDir() {
   let cwdSnapshot = ''
   const cwd = Deno.cwd()
 
+  /**
+   * Constructs the ignore list for files and directories to exclude from the snapshot.
+   *
+   * @returns {string[]} - The array of paths to ignore.
+   */
   function constructIgnoreList(): string[] {
     const ignoreNames = [
       '.git',

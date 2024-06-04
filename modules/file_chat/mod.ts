@@ -1,3 +1,10 @@
+/**
+ * Module for interacting with OpenAI's language model to generate responses based on file contents and optional directory snapshots.
+ * The module reads a specified file, optionally includes a directory snapshot, and uses OpenAI's API to generate responses.
+ *
+ * @module OpenAIFileAssistant
+ */
+
 import {
   chatLoop,
   codeFence,

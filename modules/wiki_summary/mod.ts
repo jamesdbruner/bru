@@ -1,3 +1,10 @@
+/**
+ * Module for searching Wikipedia for a given subject, fetching the most relevant article,
+ * and summarizing it using OpenAI.
+ *
+ * @module WikipediaSummarizer
+ */
+
 import { getArgs, instance, log, model, OpenAI, stream } from 'bru'
 
 const { subject } = await getArgs({

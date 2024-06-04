@@ -1,3 +1,8 @@
+/**
+ * @module TestGenerator
+ * Module for generating unit tests for Deno modules using OpenAI.
+ */
+
 import OpenAI from 'openai'
 import instance from 'helpers/openai/init.ts'
 import model from 'helpers/openai/model.ts'
@@ -14,6 +19,12 @@ const {
   output: { arg: Deno.args[1], prompt: 'Enter output directory:' },
 })
 
+/**
+ * Generates unit tests for a given TypeScript file using OpenAI.
+ *
+ * @param {string} file - The path to the TypeScript file for which to generate tests.
+ * @returns {Promise<void>}
+ */
 async function generateTests(file: string) {
   const code = await Deno.readTextFile(file)
   const messages: OpenAI.ChatCompletionMessageParam[] = [
@@ -52,6 +63,12 @@ async function generateTests(file: string) {
   await saveFile(String(response.choices[0].message.content), filePath)
 }
 
+/**
+ * Processes the specified directories, generating unit tests for all TypeScript files.
+ *
+ * @param {string[]} dirs - The directories to process.
+ * @returns {Promise<void>}
+ */
 async function processDirs(dirs: string[]) {
   for (const dir of dirs) {
     await walkMod(
