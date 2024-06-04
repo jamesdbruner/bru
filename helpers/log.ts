@@ -1,32 +1,43 @@
 export type LogType = 'log' | 'error' | 'warn' | 'info'
 import { NAME } from '../env.ts'
 
+interface LogOptions {
+  type?: LogType
+  styles?: string
+  name?: string
+}
+
 function logger(defaultName = NAME) {
   const logMessage = (
     message: string,
-    type: LogType = 'log',
-    name: string = defaultName,
+    {
+      type = 'log',
+      styles = '',
+      name = defaultName,
+    }: LogOptions = {},
   ) => {
-    const prefix = `[${name}]:`
-    const prefixStyle = 'font-weight: bold;'
-    const messageStyle = 'font-weight: normal;'
+    const prefix = `[%c${name}]:`
+    const prefixStyle = 'font-weight: bold; '
+    const messageStyle = 'font-weight: normal; '
 
     console[type](
-      `%c${prefix}%c ${message}`,
+      `${prefix} %c${message}`,
       prefixStyle,
       messageStyle,
+      styles,
     )
   }
 
   const baseLog = Object.assign(
-    (message: string, name?: string) => logMessage(message, 'log', name),
+    (message: string, options?: LogOptions) =>
+      logMessage(message, { ...options, type: 'log' }),
     {
-      error: (message: string, name?: string) =>
-        logMessage(message, 'error', name),
-      warn: (message: string, name?: string) =>
-        logMessage(message, 'warn', name),
-      info: (message: string, name?: string) =>
-        logMessage(message, 'info', name),
+      error: (message: string, options?: Omit<LogOptions, 'type'>) =>
+        logMessage(message, { ...options, type: 'error' }),
+      warn: (message: string, options?: Omit<LogOptions, 'type'>) =>
+        logMessage(message, { ...options, type: 'warn' }),
+      info: (message: string, options?: Omit<LogOptions, 'type'>) =>
+        logMessage(message, { ...options, type: 'info' }),
     },
   )
 
