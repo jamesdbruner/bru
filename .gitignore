@@ -5,6 +5,8 @@ lcov.info
 .env
 .vscode
 .idea
+.cache
+temp
 
 # MacOS generated files
 .DS_Store
