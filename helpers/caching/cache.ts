@@ -10,8 +10,6 @@ export async function writeToCache(
   const baseName = basename(filePath, extname(filePath)) + ext
   const fullCachePath = join(CACHE_PATH, dirname(filePath), baseName)
 
-  // log(`Writing to cache %c${fullCachePath}`, { styles: 'color: green; ' })
-
   await Deno.writeTextFile(fullCachePath, content)
 }
 
