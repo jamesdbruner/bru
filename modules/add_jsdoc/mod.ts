@@ -10,6 +10,12 @@ import {
   walkMod,
 } from 'bru'
 
+/**
+ * Generates JSDoc comments for a given TypeScript file using OpenAI's language model.
+ *
+ * @param {string} file - The path to the TypeScript file.
+ * @returns {Promise<void>}
+ */
 async function jsdoc(file: string) {
   const code = await Deno.readTextFile(file)
 
