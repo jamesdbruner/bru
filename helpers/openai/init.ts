@@ -13,7 +13,8 @@ if (!OPENAI_API_KEY) {
   USER_INPUT_API_KEY = await $.prompt('Enter your OpenAI API key:', {
     mask: true,
   })
-  Deno.env.set('OPENAI_API_KEY', USER_INPUT_API_KEY) // Note: only for the current Deno process
+  // Note: only for the current Deno process
+  Deno.env.set('OPENAI_API_KEY', USER_INPUT_API_KEY)
 
   log('To save your OpenAI API key for future sessions:')
   log('On Linux/macOS, add the following line to your .bashrc or .zshrc:')

@@ -19,7 +19,7 @@ async function chat(
 
   while (true) {
     const userMessage = await $.prompt('[you]:')
-    log(userMessage, 'you')
+    log(userMessage, { name: 'you' })
 
     messages.push({ role: 'user', content: userMessage })
 
@@ -29,7 +29,7 @@ async function chat(
       stream: true,
     }
 
-    log('\n', 'ai')
+    log('\n', { name: 'ai' })
     const response = await stream(instance, chatCompletionParams)
 
     console.log('\n')

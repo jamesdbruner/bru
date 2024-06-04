@@ -35,7 +35,7 @@ export async function ask() {
     stream: true,
   }
 
-  log('\n', 'ai')
+  log('\n', { name: 'ai' })
 
   const response = await stream(instance, chatCompletionParams)
   await chatLoop(messages, response)
