@@ -61,7 +61,7 @@ const summaryData = await summaryResponse.json()
 
 // Summarize the Wikipedia article
 log('Summarizing article. \n')
-log('\n', 'ai')
+log('\n', { name: 'ai' })
 
 // Define the ChatCompletionCreateParamsNonStreaming object
 const chatCompletionParams: OpenAI.ChatCompletionCreateParamsStreaming = {
