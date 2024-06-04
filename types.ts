@@ -15,9 +15,16 @@ export type DenoPermissions = {
 export interface ModOptions {
   compile?: boolean
   install?: boolean
+  name?: string
 }
 
 export interface ModulePermissions {
   default: DenoPermissions
   options: ModOptions
+}
+
+export type HashTable = {
+  [key: string]: {
+    [subdir: string]: string[]
+  }
 }
