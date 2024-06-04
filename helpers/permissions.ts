@@ -5,7 +5,7 @@
  * @returns A promise that resolves to the permissions object for the module.
  */
 
-import { DenoPermissions, ModOptions } from '@/types.ts'
+import type { DenoPermissions, ModOptions } from '@/types.ts'
 import { log } from 'bru'
 
 export interface ModulePermissions {
@@ -28,7 +28,8 @@ export async function getModulePermissions(
         error instanceof Error ? error.message : String(error)
       }`,
     )
-    return { default: {}, options: {} } // Default to no permissions if the file is not found
+    // Default to no permissions if the file is not found
+    return { default: {}, options: {} }
   }
 }
 
