@@ -41,6 +41,9 @@ export async function writeConfig(
   config: Config,
   name: string = NAME,
 ): Promise<void> {
+  // Ensure the cache directory exists
+  await Deno.mkdir(CACHE_PATH, { recursive: true })
+
   const yamlContent = stringify(config, { lineWidth: -1, indent: 2 })
   await Deno.writeTextFile(join(CACHE_PATH, `${name}_config.yml`), yamlContent)
 }

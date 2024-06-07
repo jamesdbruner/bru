@@ -1,3 +1,10 @@
+/**
+ * Module for creating a directory snapshot with specified depth and ignore patterns.
+ * It prompts the user for necessary inputs if they are not provided as arguments.
+ *
+ * @module DirectorySnapshot
+ */
+
 import { getArgs, log, snapshot } from 'bru'
 
 const ignoreList = [
