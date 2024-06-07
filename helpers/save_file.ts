@@ -28,7 +28,9 @@ async function saveFile(content: string, name?: string): Promise<void> {
       // No action needed; the file does not exist, so we can proceed to write it
     } else {
       // An unexpected error occurred
-      log.error(`An error occurred while checking the file: ${error.message}`)
+      log.error(
+        `An error occurred while checking the ${filePath} ${error.message}`,
+      )
       Deno.exit(1)
     }
   }
@@ -36,9 +38,11 @@ async function saveFile(content: string, name?: string): Promise<void> {
   // Write to the file
   try {
     await Deno.writeTextFile(filePath, content)
-    log(`Response saved to ${fileName}`)
+    log(`File saved %c${filePath}`, {
+      styles: 'font-weight: bold; color: blue;',
+    })
   } catch (error) {
-    log.error(`An error occurred while saving the file: ${error.message}`)
+    log.error(`An error occurred while saving ${filePath} ${error.message}`)
   }
 }
 
