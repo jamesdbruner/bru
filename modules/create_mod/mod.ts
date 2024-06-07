@@ -87,24 +87,6 @@ export const options = ${JSON.stringify(optionsObj, null, 2)};\n`
 }
 
 /**
- * Creates a new deno.json file with prefilled name, version, and exports fields.
- */
-async function createDenoJson(path: string, mod: string, version: string) {
-  const scope = Deno.env.get('SCOPE') || `@${Deno.env.get('NAME')}`
-  const denoJson = {
-    name: `${scope}/${mod}`,
-    version,
-    exports: './mod.ts',
-  }
-
-  // Write the string to deno.json in the module directory
-  await Deno.writeTextFileSync(
-    `${path}/deno.json`,
-    JSON.stringify(denoJson, null, 2),
-  )
-}
-
-/**
  * Creates a new Deno module with selected permissions.
  */
 async function main() {
@@ -120,7 +102,6 @@ async function main() {
 
   await ensureDir(moduleDirPath)
   await createPermissionsFile(moduleDirPath)
-  await createDenoJson(moduleDirPath, moduleName, '0.1.0')
 
   const destinationPath = `${moduleDirPath}/mod.ts`
   if (useTemplate) {
