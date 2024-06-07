@@ -7,10 +7,10 @@ interface SidebarConfig {
 }
 
 /**
- * Generates the Astro configuration string with dynamic sidebar directories.
+ * Generates the astro config string with dynamic sidebar directories.
  *
  * @param {string[]} directories - List of directories to include in the sidebar.
- * @returns {string} - The generated Astro configuration string.
+ * @returns {string} - The generated astro config string.
  */
 export function generateStarlightConfig(directories: string[]): string {
   const sidebarConfig: SidebarConfig[] = directories.map((dir) => {
@@ -43,9 +43,9 @@ export default defineConfig({
 }
 
 /**
- * Writes the generated Astro configuration to the astro.config.mjs file.
+ * Writes the generated astro config to the astro.config.mjs file.
  *
- * @param {string} outputDir - The output directory to write the Astro configuration to.
+ * @param {string} outputDir - The output directory to write the astro config to.
  * @param {string[]} directories - List of directories to include in the sidebar.
  * @returns {Promise<void>}
  */
@@ -60,10 +60,10 @@ export async function writeStarlightConfig(
     await Deno.writeTextFileSync(configPath, configContent)
     console.log('\n')
 
-    log(`Successfully wrote Astro configuration to %c${configPath}`, {
+    log(`Writing astro config to %c${configPath}`, {
       styles: 'color: blue;',
     })
   } catch (error) {
-    log.error(`Error writing Astro configuration: ${error}`)
+    log.error(`Error writing astro config: ${error}`)
   }
 }
