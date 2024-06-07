@@ -24,6 +24,7 @@ import {
   removeFromCache,
   removeFromHashTable,
   selectFolders,
+  toCapitalCase,
   updateHashTable,
   walkMod,
   writeToCache,
@@ -38,7 +39,7 @@ import { readConfig, writeConfig } from 'helpers/caching/config.ts'
  * Generates MDX documentation for a given file using OpenAI's language model.
  *
  * @param {string} file - The path to the file to generate documentation for.
- * @param {string} ext - The file extension to replace with `.md` for the output.
+ * @param {string} ext - The file extension to replace with `.mdx` for the output.
  * @returns {Promise<void>}
  */
 async function getModuleMDX(file: string, ext: string) {
@@ -46,7 +47,7 @@ async function getModuleMDX(file: string, ext: string) {
   const cached = await checkHashTable(fileKey)
 
   if (cached) {
-    return await readFromCache(fileKey, '.md')
+    return await readFromCache(fileKey, '.mdx')
   }
 
   await ensureDir(join(CACHE_PATH, dirname(fileKey)))
@@ -77,61 +78,52 @@ async function getModuleMDX(file: string, ext: string) {
           - **<Steps>**: For numbered task lists.
 
           Avoid lengthy introductions or conclusions. The content should be straightforward, technically informative, and directly related to the provided file contents.
+          Avoid code fences for markdown e.g. using "\`\`\`mdx" or "\`\`\`markdown" in the response. Only use code fences for code examples.
+          Component imports should be come at the very start of the response. Do not include a title for the document.
 
           Here are some example components you can use to enhance the documentation:
 
           ### Tabs
-          \`\`\`mdx
           import { Tabs, TabItem } from '@astrojs/starlight/components';
 
           <Tabs>
             <TabItem label="pnpm">pnpm astro</TabItem>
             <TabItem label="yarn">yarn astro</TabItem>
           </Tabs>
-          \`\`\`
 
           ### Card Grid
-          \`\`\`mdx
           import { Card, CardGrid } from '@astrojs/starlight/components';
 
           <CardGrid>
             <Card title="Card 1">Content for Card 1</Card>
             <Card title="Card 2">Content for Card 2</Card>
           </CardGrid>
-          \`\`\`
 
           ### Aside
-          \`\`\`mdx
           import { Aside } from '@astrojs/starlight/components';
 
           <Aside type="tip" title="Tip">
             This is a tip
           </Aside>
-          \`\`\`
 
           ### Code Example
-          \`\`\`mdx
-          import { Code } from '@astrojs/starlight/components';
-
+          \`\`\`jsx
           <Code code={\`console.log('Hello, world!');\`} lang="js" />
           \`\`\`
 
           ### FileTree
-          \`\`\`mdx
           import { FileTree } from '@astrojs/starlight/components';
 
           <FileTree>
           - src/
             - content/
               - docs/
-                - hello-world.md
+                - hello-world.mdx
                 - reference/
-                  - faq.md
+                  - faq.mdx
           </FileTree>
-          \`\`\`
 
           ### Steps
-          \`\`\`mdx
           import { Steps } from '@astrojs/starlight/components';
 
           <Steps>
@@ -142,7 +134,6 @@ async function getModuleMDX(file: string, ext: string) {
 
             2. Wrap \`<Steps>\` around your ordered list items.
           </Steps>
-          \`\`\`
         `,
       },
       {
@@ -166,12 +157,12 @@ async function getModuleMDX(file: string, ext: string) {
 
   const result = addFrontmatter(
     String(response?.choices[0]?.message?.content?.trim()),
-    moduleName || 'module',
+    toCapitalCase(moduleName || 'module'),
     'placeholder',
   )
 
   await updateHashTable(fileKey)
-  await writeToCache(fileKey, result, '.md')
+  await writeToCache(fileKey, result, '.mdx')
 }
 
 /**
@@ -230,7 +221,7 @@ async function copyCachedFiles(
           for (const subdir in hashTable[dir]) {
             const files = hashTable[dir][subdir]
             for (const file of files) {
-              const fileMD = file.replace(ext, '.md')
+              const fileMD = file.replace(ext, '.mdx')
               const srcPath = join(CACHE_PATH, dir, subdir, fileMD)
               const destPath = join(path, dir, subdir, fileMD)
 
@@ -261,7 +252,7 @@ async function main(cacheRemoveFileName?: string) {
 
   if (cacheRemoveFileName) {
     try {
-      await removeFromCache(cacheRemoveFileName, '.md')
+      await removeFromCache(cacheRemoveFileName, '.mdx')
       await removeFromHashTable(cacheRemoveFileName)
 
       log(`Successfully removed from cache: %c${cacheRemoveFileName}`, {
