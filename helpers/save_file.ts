@@ -10,22 +10,32 @@
 
 import { $, log, overwrite } from 'bru'
 
-async function saveFile(content: string, name?: string) {
+async function saveFile(content: string, name?: string): Promise<void> {
   const fileName = name ||
     await $.prompt('Enter the file name (including extension):')
   const filePath = `${Deno.cwd()}/${fileName}`
 
   // Check if the file exists before confirming overwrite
-  if (await Deno.readFileSync(filePath)) {
+  try {
+    await Deno.stat(filePath)
+    // If the file exists, ask for confirmation to overwrite
     if (!(await overwrite(filePath))) {
       log('Exiting without overwriting the file')
+      Deno.exit(1)
+    }
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      // No action needed; the file does not exist, so we can proceed to write it
+    } else {
+      // An unexpected error occurred
+      log.error(`An error occurred while checking the file: ${error.message}`)
       Deno.exit(1)
     }
   }
 
   // Write to the file
   try {
-    await Deno.writeTextFileSync(filePath, content)
+    await Deno.writeTextFile(filePath, content)
     log(`Response saved to ${fileName}`)
   } catch (error) {
     log.error(`An error occurred while saving the file: ${error.message}`)
