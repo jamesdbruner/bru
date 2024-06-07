@@ -35,6 +35,8 @@ async function saveFile(content: string, name?: string): Promise<void> {
     }
   }
 
+  console.log('\n')
+
   // Write to the file
   try {
     await Deno.writeTextFile(filePath, content)

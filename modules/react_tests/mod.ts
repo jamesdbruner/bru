@@ -37,6 +37,7 @@ const chatCompletionParams: OpenAI.ChatCompletionCreateParamsStreaming = {
 }
 
 // Get the initial response from openai
+log('\n', { name: 'ai' })
 const response = await stream(instance, chatCompletionParams)
 
 // Refine the output by having a conversation with OpenAI
