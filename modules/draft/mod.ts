@@ -81,14 +81,21 @@ async function getModuleMDX(file: string, ext: string) {
           Avoid code fences for markdown e.g. using "\`\`\`mdx" or "\`\`\`markdown" in the response. Only use code fences for code examples.
           Component imports should be come at the very start of the response. Do not include a title for the document.
 
+
+          Notes:
+            - You can only use built-in components from '@astrojs/starlight/components'
+            - Refrain from using (Required<NpmCommands>) or similar TypeScript syntax in the response
+            - Refrain from using jsdoc comments in the response
+            - Refrain from using tags that are not part of the Astro documentation or valid HTML5, meaning wrapping text brackets e.g "React.HTMLAttributes<HTMLDivElement>"
+
           Here are some example components you can use to enhance the documentation:
 
           ### Tabs
           import { Tabs, TabItem } from '@astrojs/starlight/components';
 
           <Tabs>
-            <TabItem label="pnpm">pnpm astro</TabItem>
-            <TabItem label="yarn">yarn astro</TabItem>
+            <TabItem label="pnpm">pnpm create astro</TabItem>
+            <TabItem label="yarn">yarn create astro</TabItem>
           </Tabs>
 
           ### Card Grid
@@ -108,7 +115,7 @@ async function getModuleMDX(file: string, ext: string) {
 
           ### Code Example
           \`\`\`jsx
-          <Code code={\`console.log('Hello, world!');\`} lang="js" />
+            <Code code={\`console.log('Hello, world!');\`} lang="js" />
           \`\`\`
 
           ### FileTree
@@ -127,12 +134,23 @@ async function getModuleMDX(file: string, ext: string) {
           import { Steps } from '@astrojs/starlight/components';
 
           <Steps>
-            1. Import the component into your MDX file:
-            \`\`\`js
-            import { Steps } from '@astrojs/starlight/components';
-            \`\`\`
-
-            2. Wrap \`<Steps>\` around your ordered list items.
+            <ol>
+              <li>
+                Import the component into your MDX file:
+                \`\`\`js
+                  import { Steps } from '@astrojs/starlight/components';
+                \`\`\`
+              </li>
+              <li>
+                Define the object or parameters
+              </li>
+              <li>
+                An example of usage
+                \`\`\`jsx
+                  <Code code={\`<Component />\`} lang="js" />
+                \`\`\`
+              </li>
+            </ol>
           </Steps>
         `,
       },
