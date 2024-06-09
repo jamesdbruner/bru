@@ -17,10 +17,10 @@ export async function getModulePermissions(
   permsFilePath: string,
 ): Promise<ModulePermissions> {
   try {
-    const permissionsModule = await import(permsFilePath)
+    const permsMod = await import(permsFilePath)
     return {
-      default: permissionsModule.default,
-      options: permissionsModule.options,
+      default: permsMod.default,
+      options: permsMod.options,
     }
   } catch (error) {
     log.error(
