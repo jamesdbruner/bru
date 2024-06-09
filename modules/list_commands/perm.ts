@@ -6,7 +6,7 @@ export default {
 } as DenoPermissions
 
 export const options = {
-  name: 'blist', // bru list
+  name: 'bls', // bru list
   install: true,
   compile: true,
 } as ModOptions
