@@ -24,7 +24,7 @@ export async function getModulePermissions(
     }
   } catch (error) {
     log.error(
-      `Error loading permissions file at ${permsFilePath}: ${
+      `${permsFilePath}: ${
         error instanceof Error ? error.message : String(error)
       }`,
     )
