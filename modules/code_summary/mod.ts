@@ -93,8 +93,6 @@ async function summarizeDir() {
     maxLines,
   )
 
-  log(cwdSnapshot)
-
   try {
     const jsonContent = await Deno.readTextFile(summaryPath)
     const summaryData = JSON.parse(jsonContent)
@@ -143,10 +141,8 @@ if (
 ) {
   try {
     await Deno.remove('./summary.json')
-    log.info('✓ summary.json file has been removed')
+    log.info('✓ Removed summary.json')
   } catch (error) {
     log.error(`Error removing summary.json: ${error.message}`)
   }
-} else {
-  log.info('summary.json file will be kept')
 }
