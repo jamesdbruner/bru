@@ -8,5 +8,5 @@ export default {
 export const options = {
   name: 'snap',
   install: true,
-  compile: true,
+  compile: false,
 } as ModOptions
