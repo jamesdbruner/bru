@@ -31,7 +31,7 @@ export async function readConfig(name: string = NAME): Promise<Config> {
 }
 
 /**
- * Writes the given configuration to the `<NAME>_config.yml` file.
+ * Writes the given configuration to the `Deno.cwd()/.cache/<NAME>_config.yml` file.
  *
  * @param {string} name - The name of the configuration file.
  * @param {Config} config - The configuration object to write to the file.
