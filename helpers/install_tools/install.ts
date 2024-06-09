@@ -46,7 +46,7 @@ async function install(name: string, force = false): Promise<string | null> {
     return null
   } catch (error) {
     if (!force) {
-      return install(modName, true)
+      return install(name, true)
     } else {
       return `Failed to install ${modName}: ${error.message}`
     }
