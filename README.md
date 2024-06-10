@@ -18,7 +18,9 @@ This repo includes
 [dax](https://github.com/dsherret/dax) and [openai](https://openai.com/))
 showcasing how it could potentially be used, the example modules aren't meant to
 be used for anything serious but rather to showcase what you could do and to
-illustrate ideas you could expand upon
+illustrate ideas you could expand upon.
+
+[Video example](https://www.youtube.com/watch?v=Xqek8-TZzrE)
 
 ## Features
 
@@ -135,11 +137,10 @@ module requires. This step is crucial for ensuring your module has the necessary
 permissions when installed and run
 
 ```typescript
-// modules/<your_module>/perm.ts
+// modules/your_module/perm.ts
 export default {
   write: true,
   net: true,
-  // Add others as needed
 }
 ```
 
