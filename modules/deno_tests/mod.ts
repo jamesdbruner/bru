@@ -3,13 +3,15 @@
  * Module for generating unit tests for Deno modules using OpenAI.
  */
 
-import OpenAI from 'openai'
-import instance from 'helpers/openai/init.ts'
-import model from 'helpers/openai/model.ts'
-import walkMod from 'helpers/walk_mod.ts'
-import getArgs from '../../helpers/prompts/get_args.ts'
-import saveFile from 'helpers/save_file.ts'
-import log from 'log'
+import {
+  getArgs,
+  instance,
+  log,
+  model,
+  OpenAI,
+  processDirs,
+  saveFile,
+} from 'bru'
 
 const {
   dirs,
@@ -63,28 +65,17 @@ async function generateTests(file: string) {
   await saveFile(String(response.choices[0].message.content), filePath)
 }
 
-/**
- * Processes the specified directories, generating unit tests for all TypeScript files.
- *
- * @param {string[]} dirs - The directories to process.
- * @returns {Promise<void>}
- */
-async function processDirs(dirs: string[]) {
-  for (const dir of dirs) {
-    await walkMod(
-      dir,
-      (file: string) => generateTests(file),
-      '.ts',
-      ['perm.ts'],
-      `Generating tests in ${dir}`,
-    )
-  }
-}
-
 // Flatten and process dirs, handling both single and multiple paths
-// Splits string input on commas and trims whitespace to ensure clean dir paths
+// Splits string input on commas and trims whitespace to ensure clean directory paths
 await processDirs(
-  [dirs].flatMap((dir) => String(dir).split(',').map((d) => d.trim())),
+  [dirs].flatMap((dir) =>
+    String(dir)
+      .split(',')
+      .map((d) => d.trim())
+  ),
+  (file: string) => generateTests(file),
+  '.ts',
+  `Generating tests in ${dirs}`,
 )
 
 log(`✓ Tests written to ${output}`)

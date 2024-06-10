@@ -5,9 +5,9 @@ import {
   log,
   model,
   OpenAI,
+  processDirs,
   saveFile,
   stream,
-  walkMod,
 } from 'bru'
 
 /**
@@ -57,18 +57,6 @@ async function jsdoc(file: string) {
   }
 }
 
-async function processDirs(dirs: string[]) {
-  for (const dir of dirs) {
-    await walkMod(
-      dir,
-      jsdoc, // Pass function directly
-      '.ts',
-      ['perm.ts'], // Adjust as needed
-      `Generating JSDoc comments in ${dir}`,
-    )
-  }
-}
-
 export async function main() {
   const { targetPath } = await getArgs({
     targetPath: { arg: Deno.args[0] },
@@ -79,7 +67,12 @@ export async function main() {
   if (stat.isFile) {
     await jsdoc(path)
   } else if (stat.isDirectory) {
-    await processDirs([path])
+    await processDirs(
+      [path],
+      jsdoc, // Pass function directly
+      '.ts',
+      `Generating JSDoc comments in ${path}`,
+    )
   } else {
     log('The provided path is neither a file nor a directory.')
   }

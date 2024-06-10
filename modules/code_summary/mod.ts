@@ -15,33 +15,15 @@ import {
   log,
   model,
   OpenAI,
+  processDirs,
   snapshot,
   stream,
   summarizeFile,
-  walkMod,
 } from 'bru'
 
 export type Summary = {
   file: string
   response: string
-}
-
-/**
- * Processes the directories and summarizes TypeScript files within them.
- *
- * @param {string[]} dirs - The array of directory paths to process.
- * @returns {Promise<void>}
- */
-async function processDirs(dirs: string[]) {
-  for (const dir of dirs) {
-    await walkMod(
-      dir,
-      summarizeFile,
-      '.ts',
-      ['perm.ts'],
-      `Summarizing files in ${dir}`,
-    )
-  }
 }
 
 /**
@@ -131,7 +113,7 @@ async function summarizeDir() {
 
 const { dirs } = await getArgs({ dirs: { arg: Deno.args } })
 
-await processDirs(dirs)
+await processDirs(dirs, summarizeFile, '.ts', `Summarizing files in ${dirs}`)
 await summarizeDir()
 
 if (

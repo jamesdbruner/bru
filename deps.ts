@@ -21,6 +21,7 @@ export { ensureFile, existsSync } from 'https://deno.land/std@0.224.0/fs/mod.ts'
 
 // Helper functions
 export { default as walkMod } from 'helpers/walk_mod.ts'
+export { default as processDirs } from 'helpers/process_dirs.ts'
 export { default as saveFile } from 'helpers/save_file.ts'
 export { default as select } from 'helpers/select.ts'
 export { default as toCapitalCase } from 'helpers/capital_case.ts'
@@ -41,6 +42,8 @@ export {
   removeFromHashTable,
   updateHashTable,
 } from 'helpers/caching/hashtable.ts'
+export { readFromConfig, writeToConfig } from 'helpers/caching/config.ts'
+export { copyCachedFiles } from 'helpers/caching/copy_cached.ts'
 
 // Prompt functions
 export { default as getArgs } from 'helpers/prompts/get_args.ts'

@@ -19,7 +19,7 @@ interface Config {
  *
  * @returns {Promise<Config>} A promise that resolves to the configuration object.
  */
-export async function readConfig(name: string = NAME): Promise<Config> {
+export async function readFromConfig(name: string = NAME): Promise<Config> {
   try {
     const content = await Deno.readTextFile(
       join(CACHE_PATH, `${name}_config.yml`),
@@ -37,7 +37,7 @@ export async function readConfig(name: string = NAME): Promise<Config> {
  * @param {Config} config - The configuration object to write to the file.
  * @returns {Promise<void>} A promise that resolves when the file has been written.
  */
-export async function writeConfig(
+export async function writeToConfig(
   config: Config,
   name: string = NAME,
 ): Promise<void> {
