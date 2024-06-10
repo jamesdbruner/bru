@@ -23,6 +23,13 @@ const moduleOptions = ['install', 'compile']
  * @param {string} moduleDirPath - The directory path for the new module.
  */
 async function createPermissionsFile(moduleDirPath: string) {
+  const alias: string = await $.prompt(
+    'Enter an alias for this module (this is the name for the terminal command once installed):',
+    {
+      default: '',
+    },
+  )
+
   // Prompt user to select required permissions
   const allowedPermissions = await $.multiSelect({
     message:
@@ -65,25 +72,42 @@ async function createPermissionsFile(moduleDirPath: string) {
     options: moduleOptions,
   })
 
-  // Construct permissions object
-  const optionsObj = selectedOptions.reduce<Record<string, boolean>>(
-    (acc, perm) => {
-      // Set each selected permission to true
-      acc[moduleOptions[perm]] = true
+  // Construct options object
+  const optionsObj = selectedOptions.reduce<Record<string, boolean | string>>(
+    (acc, option) => {
+      // Set each selected option to true
+      acc[moduleOptions[option]] = true
       return acc
     },
     {},
   )
 
+  // Add alias to options object
+  if (alias) optionsObj.name = alias
+
   // Construct the permissions file template string
-  const permFileContent = `import { DenoPermissions } from "@/types.ts";
+  const permFileContent =
+    `import type { DenoPermissions, ModOptions } from '@/types.ts'
 
-export default ${JSON.stringify(permissionsObj, null, 2)} as DenoPermissions;
+export default {
+  ${
+      Object.entries(permissionsObj)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(',\n  ')
+    }
+} as DenoPermissions
 
-export const options = ${JSON.stringify(optionsObj, null, 2)};\n`
+export const options = {
+  ${
+      Object.entries(optionsObj)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(',\n  ')
+    }
+} as ModOptions
+`
 
   // Write to perm.ts in the module directory
-  await Deno.writeTextFileSync(`${moduleDirPath}/perm.ts`, permFileContent)
+  await Deno.writeTextFile(`${moduleDirPath}/perm.ts`, permFileContent)
 }
 
 /**

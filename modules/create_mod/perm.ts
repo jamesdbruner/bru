@@ -4,9 +4,11 @@ export default {
   read: true,
   write: true,
   net: true,
+  env: true,
 } as DenoPermissions
 
 export const options = {
-  install: false,
+  name: 'cmod',
+  install: true,
   compile: false,
 } as ModOptions
