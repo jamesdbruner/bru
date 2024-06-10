@@ -9,6 +9,7 @@ import {
   addFrontmatter,
   checkHashTable,
   codeFence,
+  copyCachedFiles,
   createCompletion,
   dirname,
   ensureDir,
@@ -18,7 +19,6 @@ import {
   log,
   model,
   OpenAI,
-  parseYaml,
   readFromCache,
   relative,
   removeFromCache,
@@ -29,11 +29,11 @@ import {
   walkMod,
   writeToCache,
 } from 'bru'
-import { HASHTABLE_PATH } from 'helpers/caching/hashtable.ts'
 import { CACHE_PATH } from 'helpers/caching/cache.ts'
+import { readFromConfig, writeToConfig } from 'helpers/caching/config.ts'
+import findArg from 'helpers/find_arg.ts'
+import processMods from 'helpers/process_mods.ts'
 import { writeStarlightConfig } from './starlight_config.ts'
-import type { HashTable } from '@/types.ts'
-import { readConfig, writeConfig } from 'helpers/caching/config.ts'
 
 /**
  * Generates MDX documentation for a given file using OpenAI's language model.
@@ -184,81 +184,6 @@ async function getModuleMDX(file: string, ext: string) {
 }
 
 /**
- * Processes multiple directories to generate MDX documentation for TypeScript files.
- *
- * @param {string[]} dirs - The array of directory paths to process.
- * @param {string} [ext='.tsx'] - The file extension to filter by.
- * @returns {Promise<void>}
- */
-async function processModules(dirs: string[], ext: string = '.tsx') {
-  await Promise.all(dirs.map(async (dir) => {
-    await walkMod(
-      dir,
-      async (filePath) => {
-        await getModuleMDX(filePath, ext)
-      },
-      ext,
-      ['perm.ts'],
-      'Generating Markdown',
-    )
-  }))
-}
-
-async function copyCachedFiles(
-  path: string = './docs/src/content/docs/',
-  selectedDirectories: string[],
-  ext: string = '.ts',
-) {
-  // Ensure the base directory exists
-  await Deno.mkdir(`${Deno.cwd()}/${path}`, { recursive: true }).catch(
-    (error) => {
-      if (!(error instanceof Deno.errors.AlreadyExists)) {
-        log.error(`Error creating directory: ${error}`)
-        throw error
-      }
-    },
-  )
-
-  await existsSync(HASHTABLE_PATH)
-
-  const content = await Deno.readTextFile(HASHTABLE_PATH)
-  const hashTable = parseYaml(content) as HashTable
-
-  const relativeDirectories = selectedDirectories.map((dir) =>
-    dir.replace(Deno.cwd(), '').replace(/^\//, '')
-  )
-
-  const progressBar = $.progress('Copying Cached Files', {
-    length: relativeDirectories.length,
-  })
-
-  try {
-    await progressBar.with(async () => {
-      for (const dir of relativeDirectories) {
-        if (hashTable[dir]) {
-          for (const subdir in hashTable[dir]) {
-            const files = hashTable[dir][subdir]
-            for (const file of files) {
-              const fileMD = file.replace(ext, '.mdx')
-              const srcPath = join(CACHE_PATH, dir, subdir, fileMD)
-              const destPath = join(path, dir, subdir, fileMD)
-
-              await ensureDir(dirname(destPath))
-              await Deno.copyFile(srcPath, destPath)
-            }
-          }
-        }
-        progressBar.increment()
-      }
-    })
-  } catch (error) {
-    log.error(`Error copying cached files: ${error}`)
-  } finally {
-    progressBar.finish()
-  }
-}
-
-/**
  * Main function to manage the overall process of generating documentation,
  * managing cache, and configuring the Astro site.
  *
@@ -281,7 +206,7 @@ async function main(cacheRemoveFileName?: string) {
     }
   }
 
-  const config = await readConfig('draft')
+  const config = await readFromConfig('draft')
 
   if (!config.cloneDir) {
     config.cloneDir = await $.prompt('where to draft', { default: 'web' })
@@ -311,12 +236,24 @@ async function main(cacheRemoveFileName?: string) {
   const { cloneDir, template, outputDir, selectedDirectories, manager } = config
 
   // Save the config file
-  await writeConfig(
+  await writeToConfig(
     { cloneDir, template, outputDir, selectedDirectories, manager },
     'draft',
   )
 
-  await processModules(selectedDirectories)
+  await processMods(
+    selectedDirectories,
+    () =>
+      walkMod(
+        '.',
+        async (filePath) => {
+          await getModuleMDX(filePath, '.tsx')
+        },
+      ),
+    '.tsx',
+    ['perm.ts'],
+    'MDX documentation',
+  )
 
   // Clone the repository if it doesn't exist and set up the documentation directory
   try {
@@ -341,8 +278,6 @@ async function main(cacheRemoveFileName?: string) {
   }
 }
 
-export const fileName =
-  Deno.args.find((arg) => arg.startsWith('--cache-remove='))
-    ?.split('=')[1] ?? ''
+const fileName = findArg(Deno.args, '--cache-remove=')
 
 await main(fileName)
