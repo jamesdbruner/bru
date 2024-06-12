@@ -14,7 +14,6 @@
   },
   "tasks": {
     "run": "deno run --allow-read=./modules --allow-run=./modules --allow-env mod.ts --import-map=import_map.json",
-    "new": "deno run --allow-read=modules/create_mod,./.env,.env.defaults,.env.example --allow-write=modules --allow-env --import-map=import_map.json modules/create_mod/mod.ts --template",
     "list": "deno run --allow-read --allow-run --allow-env helpers/install_tools/list.ts",
     "install": "deno run --allow-read --allow-run --allow-write --allow-env helpers/install_tools/install.ts;deno task install_cli;deno task list",
     "uninstall": "deno run --allow-read --allow-run --allow-write --allow-env helpers/install_tools/uninstall.ts;deno task uninstall_cli;deno task list",
