@@ -1,4 +1,4 @@
-import { $, log, walk } from 'bru'
+import { $, log, srcDir, walk } from 'bru'
 
 const formatName = (name: string) =>
   name.replace(/\/mod$/, '').replace(/\.ts$/, '').split('/').pop() || ''
@@ -38,7 +38,7 @@ async function main() {
 
   if (selected !== null) {
     const modPath =
-      new URL(`./modules/${options[selected]}/mod.ts`, import.meta.url).href
+      new URL(`${srcDir}/${options[selected]}/mod.ts`, import.meta.url).href
 
     await import(modPath)
   } else {

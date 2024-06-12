@@ -1,6 +1,5 @@
-import { $, denoBin, getModulePermissions, log, walk } from 'bru'
+import { $, denoBin, getModulePermissions, log, srcDir, walk } from 'bru'
 
-const src = './modules'
 // Timeout can be passed as a Deno argument
 const timeout = parseInt(Deno.args[0]) || 0
 
@@ -30,7 +29,7 @@ async function uninstallAll() {
   const modulesToUninstall: string[] = []
   const errors: string[] = []
 
-  for await (const entry of walk(src, { maxDepth: 1 })) {
+  for await (const entry of walk(srcDir, { maxDepth: 1 })) {
     if (!entry.isDirectory || entry.name === 'modules') continue
     const permFileURL = new URL(
       `../../modules/${entry.name}/perm.ts`,
