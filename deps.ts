@@ -22,6 +22,7 @@ export { ensureFile, existsSync } from 'https://deno.land/std@0.224.0/fs/mod.ts'
 // Helper functions
 export { default as walkMod } from 'helpers/walk_mod.ts'
 export { default as processDirs } from 'helpers/process_dirs.ts'
+export { default as processMods } from 'helpers/process_mods.ts'
 export { default as saveFile } from 'helpers/save_file.ts'
 export { default as select } from 'helpers/select.ts'
 export { default as toCapitalCase } from 'helpers/capital_case.ts'
@@ -29,6 +30,8 @@ export { default as snapshot } from 'helpers/snapshot.ts'
 export { default as codeFence } from 'helpers/openai/code_fence.ts'
 export { default as addFrontmatter } from 'helpers/add_frontmatter.ts'
 export { default as getModulePermissions } from 'helpers/permissions.ts'
+export { default as findArg } from 'helpers/find_arg.ts'
+
 export { binDir, denoBin, denoDir, homeDir, srcDir } from 'helpers/constants.ts'
 
 // Caching helpers
