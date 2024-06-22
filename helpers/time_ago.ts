@@ -8,10 +8,15 @@
 function timeAgo(mtime: string) {
   const modTime = new Date(mtime).getTime()
   const currentTime = Date.now()
-  const timeDiff = currentTime - modTime // Difference in milliseconds
-  const minutes = Math.round(timeDiff / 60000) // Convert to minutes
-  const hours = Math.round(minutes / 60) // Convert to hours
-  const days = Math.round(hours / 24) // Convert to days
+
+  // Difference in milliseconds
+  const timeDiff = currentTime - modTime
+
+  // Convert to minutes
+  const minutes = Math.round(timeDiff / 60000)
+
+  const hours = Math.round(minutes / 60)
+  const days = Math.round(hours / 24)
 
   // Choose the most appropriate unit based on the length of time
   if (days > 1) {
