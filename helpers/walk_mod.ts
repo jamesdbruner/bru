@@ -29,7 +29,7 @@ export async function runModule(
  *
  * @param {string} dir - The directory to walk through.
  * @param {function(string): Promise<void>} run - The function to execute for each file.
- * @param {string} [ext='.ts'] - The file extension to filter by.
+ * @param {string} [ext=/.ts/] - The file extension to filter by.
  * @param {string[]} [skipFiles=['perm.ts']] - Files to skip during processing.
  * @param {string} [message=`Walking ${dir}`] - The message to display with the progress bar.
  * @returns {Promise<void>}
@@ -38,9 +38,9 @@ export async function runModule(
 export async function walkMod(
   dir: string,
   run: (mod: string) => Promise<void>,
-  ext = '.ts',
+  ext: RegExp = /\.tsx?$/,
   skipFiles: string[] = ['perm.ts'],
-  message = `Walking ${dir}`,
+  message: string = `Walking ${dir}`,
 ) {
   const files = await collectAllFiles(dir, ext, skipFiles)
   const length = files.length - skipFiles.length
@@ -57,20 +57,20 @@ export async function walkMod(
  * Collects all files in a directory matching the provided extension and excluding specific files.
  *
  * @param {string} dir - The directory to search.
- * @param {string} ext - The file extension to match.
+ * @param {RegEx} ext - The file extension regex to match.
  * @param {string[]} skipFiles - The files to exclude.
  * @returns {Promise<string[]>} - A promise that resolves to a list of file paths.
  */
 
 export async function collectAllFiles(
   dir: string,
-  ext: string,
+  ext: RegExp,
   skipFiles: string[],
 ): Promise<string[]> {
   const files: string[] = []
   for await (
     const entry of walk(dir, {
-      match: [new RegExp(`.${ext}$`)],
+      match: [ext],
     })
   ) {
     if (entry.isFile && !skipFiles.includes(entry.name)) {
