@@ -17,6 +17,7 @@
     "list": "deno run --allow-read --allow-run --allow-env helpers/install_tools/list.ts",
     "install": "deno run --allow-read --allow-run --allow-write --allow-env helpers/install_tools/install.ts;deno task install_cli;deno task list",
     "uninstall": "deno run --allow-read --allow-run --allow-write --allow-env helpers/install_tools/uninstall.ts;deno task uninstall_cli;deno task list",
+    "reinstall": "deno task uninstall;deno task install",
     "install_cli": "deno run --allow-read --allow-env --allow-run helpers/install_tools/install_cli.ts",
     "uninstall_cli": "deno run --allow-read --allow-env --allow-run helpers/install_tools/uninstall_cli.ts",
     "cache": "deno cache --lock=deno.lock --lock-write deps.ts",
