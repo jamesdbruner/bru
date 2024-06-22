@@ -222,8 +222,8 @@ async function main(cacheRemoveFileName?: string) {
     })
   }
 
-  if (!config.selectedDirectories) {
-    config.selectedDirectories = await selectFolders()
+  if (!config.selectedDirs) {
+    config.selectedDirs = await selectFolders()
   }
 
   if (!config.manager) {
@@ -233,16 +233,16 @@ async function main(cacheRemoveFileName?: string) {
       | 'pnpm'
   }
 
-  const { cloneDir, template, outputDir, selectedDirectories, manager } = config
+  const { cloneDir, template, outputDir, selectedDirs, manager } = config
 
   // Save the config file
   await writeToConfig(
-    { cloneDir, template, outputDir, selectedDirectories, manager },
+    { cloneDir, template, outputDir, selectedDirs, manager },
     'draft',
   )
 
   await processMods(
-    selectedDirectories,
+    selectedDirs,
     () =>
       walkMod(
         '.',
@@ -250,7 +250,7 @@ async function main(cacheRemoveFileName?: string) {
           await getModuleMDX(filePath, '.tsx')
         },
       ),
-    '.tsx',
+    /.ts/,
     ['perm.ts'],
     'MDX documentation',
   )
@@ -262,10 +262,13 @@ async function main(cacheRemoveFileName?: string) {
       await $`${manager} create astro --template ${template} ${cloneDir} -y`
     }
 
-    await copyCachedFiles(outputDir, selectedDirectories, '.tsx')
+    await copyCachedFiles(
+      `${Deno.cwd()}/${outputDir}`,
+      selectedDirs,
+    )
 
     if (String(template) === 'starlight') {
-      await writeStarlightConfig(cloneDir, selectedDirectories)
+      await writeStarlightConfig(cloneDir, selectedDirs)
     }
 
     await Deno.chdir(`./${cloneDir}`)
