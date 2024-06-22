@@ -2,7 +2,6 @@
   "imports": {
     "bru": "./deps.ts",
     "@/": "./",
-    "log": "./helpers/log.ts",
     "helpers/": "./helpers/",
     "openai": "https://deno.land/x/openai@v4.20.1/mod.ts",
     "openai/": "https://deno.land/x/openai@v4.20.1/",
