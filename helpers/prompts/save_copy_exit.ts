@@ -5,13 +5,17 @@
  *
  * @async
  * @function
- * @param {OpenAI.ChatCompletionMessageParam} message - The message that triggers the SaveCopyExit.
+ * @param {OpenAI.ChatCompletionMessageParam | string} message - The message or string that triggers the SaveCopyExit.
  */
 
 import { clipboard, OpenAI, saveFile, select } from 'bru'
 
-async function SaveCopyExit(message: OpenAI.ChatCompletionMessageParam) {
-  const content = String(message.content)
+async function SaveCopyExit(
+  message: OpenAI.ChatCompletionMessageParam | string,
+) {
+  const content = typeof message === 'string'
+    ? message
+    : String(message.content)
 
   const options = [
     { label: 'Exit' }, // No action needed for exit, so we can omit the 'action' property
