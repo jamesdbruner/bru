@@ -83,7 +83,7 @@ async function createPermissionsFile(moduleDirPath: string) {
   )
 
   // Add alias to options object
-  if (alias) optionsObj.name = alias
+  if (alias) optionsObj.name = `'${alias}'`
 
   // Construct the permissions file template string
   const permFileContent =
@@ -134,7 +134,7 @@ async function main() {
     await Deno.writeTextFileSync(destinationPath, '')
   }
 
-  log(`Module ${moduleName} created with selected permissions.`)
+  log(`Created %c${moduleName}`, { styles: 'color: green; ' })
 }
 
 await main()
