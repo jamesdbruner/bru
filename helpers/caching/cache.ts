@@ -10,6 +10,8 @@ export async function writeToCache(
   const baseName = basename(filePath, extname(filePath)) + ext
   const fullCachePath = join(CACHE_PATH, dirname(filePath), baseName)
 
+  // Ensure the directory exists
+  await Deno.mkdir(join(CACHE_PATH, dirname(filePath)), { recursive: true })
   await Deno.writeTextFile(fullCachePath, content)
 }
 
