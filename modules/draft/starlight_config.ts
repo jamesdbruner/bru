@@ -1,5 +1,4 @@
-import { NAME } from 'env'
-import { log } from 'bru'
+import { log, NAME } from 'bru'
 
 interface SidebarConfig {
   label: string

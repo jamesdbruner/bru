@@ -1,5 +1,4 @@
-import { $ } from 'bru'
-import { NAME } from 'env'
+import { $, NAME } from 'bru'
 
 export async function uninstallMod() {
   await $`deno uninstall ${NAME}`

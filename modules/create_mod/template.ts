@@ -7,8 +7,7 @@
  * ensuring to adapt argument handling and logging to fit your requirements.
  */
 
-import log from 'log'
-import getArgs from '../../helpers/prompts/get_args.ts'
+import { getArgs, log } from 'bru'
 
 const { argument } = await getArgs({ argument: { arg: Deno.args[0] } })
 

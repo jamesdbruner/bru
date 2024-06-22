@@ -6,15 +6,9 @@
  * @module UnitTestGenerator
  */
 
-import { chatLoop, instance, log, model, OpenAI, stream } from 'bru'
+import { chatLoop, instance, log, model, OpenAI, selectFile, stream } from 'bru'
 
-// Check for file argument
-if (Deno.args.length !== 1) {
-  log.error('Please provide a file as an argument')
-  Deno.exit(1)
-}
-
-const file = Deno.args[0]
+const file = String(Deno.args[0] || await selectFile())
 const code = await Deno.readTextFile(file)
 
 const messages: OpenAI.ChatCompletionMessageParam[] = [

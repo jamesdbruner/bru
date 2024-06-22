@@ -8,7 +8,7 @@
  * @returns {Promise<void>} A promise that resolves when the command list is printed.
  */
 
-import { denoBin, log, walk } from 'bru'
+import { denoBin, log, NAME, walk } from 'bru'
 
 /**
  * Lists all installed Deno commands by reading the Deno bin directory.
@@ -23,7 +23,7 @@ async function listInstalledCommands(): Promise<void> {
     return
   }
 
-  log(`Listing Deno commands installed in: %c${denoBin}`, {
+  log(`${NAME} commands installed in %c${denoBin}`, {
     styles: 'font-weight: bold; color: green; ',
   })
   const commands: string[] = []

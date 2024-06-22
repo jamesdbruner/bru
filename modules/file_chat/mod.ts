@@ -13,12 +13,12 @@ import {
   log,
   model,
   OpenAI,
+  selectFile,
   snapshot,
   stream,
 } from 'bru'
 
 const config = {
-  file: { arg: Deno.args[0], prompt: 'Enter the file path:' },
   includeSnapshot: { arg: Deno.args[1], prompt: 'Include snapshot? (y/n):' },
   snapshotPath: { arg: Deno.args[2] ?? '.', prompt: 'Enter snapshot path:' },
   snapshotDepth: { arg: Deno.args[3] ?? '3', prompt: 'Enter snapshot depth:' },
@@ -26,7 +26,6 @@ const config = {
 }
 
 const {
-  file,
   includeSnapshot,
   snapshotPath,
   snapshotDepth,
@@ -34,6 +33,8 @@ const {
 } = await getArgs(config)
 
 let cwd = ''
+const file = String(Deno.args[0] || await selectFile())
+
 const contents = await Deno.readTextFile(String(file))
 const ignoreList = [
   '.git',

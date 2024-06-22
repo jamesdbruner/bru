@@ -1,7 +1,14 @@
-import { basename, existsSync, join, log, parseYaml, stringify } from 'bru'
-import { NAME } from 'env'
-import { CACHE_PATH } from './cache.ts'
 import type { HashTable } from '@/types.ts'
+import {
+  basename,
+  CACHE_PATH,
+  existsSync,
+  join,
+  log,
+  NAME,
+  parseYaml,
+  stringify,
+} from 'bru'
 
 export const HASHTABLE_PATH = join(CACHE_PATH, `${NAME}_hashtable.yml`)
 

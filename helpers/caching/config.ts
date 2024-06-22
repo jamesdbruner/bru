@@ -1,5 +1,4 @@
-import { join, parseYaml, stringify } from 'bru'
-import { NAME } from 'env'
+import { join, NAME, parseYaml, stringify } from 'bru'
 
 const CACHE_PATH = './.cache'
 
@@ -10,12 +9,13 @@ interface Config {
   cloneDir?: string
   template?: string | void
   outputDir?: string
-  selectedDirectories?: string[]
+  selectedDirs?: string[]
   manager?: 'yarn' | 'npm' | 'pnpm'
 }
 
 /**
- * Reads the configuration from the `<NAME>_config.yml` file.
+ * Reads the configuration from the `<namespace>_config.yml` file.
+ * Default namespace is `NAME` from your .env file.
  *
  * @returns {Promise<Config>} A promise that resolves to the configuration object.
  */

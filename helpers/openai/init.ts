@@ -3,9 +3,7 @@
  * @type {OpenAI}
  */
 
-import { OPENAI_API_KEY } from 'env'
-import $ from 'https://deno.land/x/dax@0.35.0/mod.ts'
-import { log, OpenAI } from 'bru'
+import { $, log, OpenAI, OPENAI_API_KEY } from 'bru'
 
 let USER_INPUT_API_KEY = ''
 

@@ -1,12 +1,13 @@
 import {
   $,
-  getArgs,
   instance,
   log,
   model,
   OpenAI,
   processDirs,
+  saveCopyExit,
   saveFile,
+  selectFile,
   stream,
 } from 'bru'
 
@@ -30,7 +31,7 @@ async function jsdoc(file: string) {
       {
         role: 'system',
         content:
-          'Focus on function/class definitions and their methods and parameters. Ignore import statements. Do NOT respond with explanations. Do NOT include a code fence.',
+          'Focus on function/class definitions and their methods and parameters. Ignore import statements. Do NOT respond with explanations. Do NOT include a code fence. Do NOT include code examples outside of the jsdoc comments or under the jsdoc comments.',
       },
       {
         role: 'user',
@@ -43,7 +44,7 @@ async function jsdoc(file: string) {
 
   log('\n', { name: 'ai' })
 
-  const response = await stream(instance, chatCompletionParams)
+  const response: string = await stream(instance, chatCompletionParams)
 
   // Optionally prompt the user to append the JSDoc comment to the file
   const confirm = await $.confirm('Append JSDoc comment to the file?', {
@@ -55,14 +56,16 @@ async function jsdoc(file: string) {
     await saveFile(updatedCode, file)
     log(`JSDoc comment added to ${file}`)
   }
+
+  log(`response: \n${response}`)
+
+  saveCopyExit(response)
 }
 
 export async function main() {
-  const { targetPath } = await getArgs({
-    targetPath: { arg: Deno.args[0] },
-  })
-  const path = String(targetPath)
+  const path = String(Deno.args[0] || await selectFile())
 
+  // Check if the path is a file or a directory
   const stat = await Deno.stat(path)
   if (stat.isFile) {
     await jsdoc(path)
@@ -70,7 +73,7 @@ export async function main() {
     await processDirs(
       [path],
       jsdoc, // Pass function directly
-      '.ts',
+      /.ts/,
       `Generating JSDoc comments in ${path}`,
     )
   } else {

@@ -1,15 +1,31 @@
-import { $, dirname, ensureDir, existsSync, join, log, parseYaml } from 'bru'
-import { CACHE_PATH } from 'helpers/caching/cache.ts'
-import { HashTable } from '@/types.ts'
-import { HASHTABLE_PATH } from 'helpers/caching/hashtable.ts'
+/**
+ * Copies cached files to the specified output directory.
+ *
+ * @param {string} path - The output directory path.
+ * @param {string[]} selectedDirs - The directories to copy from the cache.
+ * @param {string} ext - The file extension to filter by.
+ * @returns {Promise<void>}
+ */
+
+import {
+  $,
+  CACHE_PATH,
+  dirname,
+  ensureDir,
+  existsSync,
+  HASHTABLE_PATH,
+  join,
+  log,
+  parseYaml,
+} from 'bru'
+import type { HashTable } from '@/types.ts'
 
 export async function copyCachedFiles(
-  path: string = './docs/src/content/docs/',
-  selectedDirectories: string[],
-  ext: string = '.ts',
+  path: string,
+  selectedDirs: string[],
 ) {
   // Ensure the base directory exists
-  await Deno.mkdir(`${Deno.cwd()}/${path}`, { recursive: true }).catch(
+  await Deno.mkdir(path, { recursive: true }).catch(
     (error) => {
       if (!(error instanceof Deno.errors.AlreadyExists)) {
         log.error(`Error creating directory: ${error}`)
@@ -18,32 +34,45 @@ export async function copyCachedFiles(
     },
   )
 
-  await existsSync(HASHTABLE_PATH)
+  if (!existsSync(HASHTABLE_PATH)) {
+    log.error(`Hash table path does not exist: ${HASHTABLE_PATH}`)
+    return
+  }
 
   const content = await Deno.readTextFile(HASHTABLE_PATH)
   const hashTable = parseYaml(content) as HashTable
 
-  const relativeDirectories = selectedDirectories.map((dir) =>
+  const relativeDirs = selectedDirs.map((dir) =>
     dir.replace(Deno.cwd(), '').replace(/^\//, '')
   )
 
   const progressBar = $.progress('Copying Cached Files', {
-    length: relativeDirectories.length,
+    length: relativeDirs.length,
   })
 
   try {
     await progressBar.with(async () => {
-      for (const dir of relativeDirectories) {
+      for (const dir of relativeDirs) {
         if (hashTable[dir]) {
           for (const subdir in hashTable[dir]) {
             const files = hashTable[dir][subdir]
             for (const file of files) {
-              const fileMD = file.replace(ext, '.mdx')
-              const srcPath = join(CACHE_PATH, dir, subdir, fileMD)
-              const destPath = join(path, dir, subdir, fileMD)
+              const srcPath = join(CACHE_PATH, dir, subdir)
+              const destPath = join(path, dir, subdir, file)
 
-              await ensureDir(dirname(destPath))
-              await Deno.copyFile(srcPath, destPath)
+              try {
+                await ensureDir(dirname(destPath))
+                await Deno.copyFile(srcPath, destPath)
+              } catch (error) {
+                if (error instanceof Deno.errors.NotFound) {
+                  log.error(`File not found: ${srcPath}`)
+                } else {
+                  log.error(
+                    `Error copying file ${srcPath} to ${destPath}: ${error}`,
+                  )
+                  throw error
+                }
+              }
             }
           }
         }
