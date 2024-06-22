@@ -1,6 +1,6 @@
 /**
- * This is an async function that constructs a snapshot of the given directory path.
- * The shapshot depth and ignored paths can be customized.
+ * This is an async function that constructs a visual snapshot of the given directory path.
+ * The shapshot depth and ignored paths can be customized. Useful for describing a directory structure to openai
  * It will stop adding files to the snapshot once maxLines has been reached.
  *
  * @async
@@ -10,20 +10,6 @@
  * @param {string[]} ignore - Optional. The list of directories or files to ignore during snapshot. Default is an empty array.
  * @param {number} maxLines - Optional. The maximum number of lines to be included in the snapshot. Default is 10.
  * @returns {Promise<string>} A promise that resolves to a string snapshot of the current working directory.
- */
-
-/**
- * This is an async function that recursively traverses the given directory path.
- * It also checks and ignores paths specified.
- *
- * @async
- * @function traverseDir
- * @param {string} currentPath - The current directory path being traversed.
- * @param {string[]} ignore - The list of directories or files to ignore during traversal.
- * @param {number} depth - The depth of traversal.
- * @param {number} currentDepth - Optional. The current depth of traversal. Default is 0.
- * @returns {void} This function does not return a value.
- * @private
  */
 
 import { relative, walk } from 'bru'
@@ -37,14 +23,12 @@ async function snapshot(
   let structure = `Snapshot of '${basePath}' (depth: ${depth})\n\n`
   let lineCount = 0
 
-  // Convert ignorePatterns to RegExp array for the skip option
   const skipRegexes = ignorePatterns.map((pattern) => new RegExp(pattern))
-
-  // Walk options including maxDepth and skip
   const walkOptions = { maxDepth: depth, skip: skipRegexes }
 
   for await (const entry of walk(basePath, walkOptions)) {
-    if (lineCount >= maxLines) break // Stop if max lines reached
+    // Stop if max lines reached
+    if (lineCount >= maxLines) break
 
     const relativePath = relative(basePath, entry.path)
     const indentation = '  '.repeat(relativePath.split('/').length - 1)
