@@ -1,11 +1,12 @@
-import { $, join } from 'bru'
-
 /**
  * Recursively navigates directories and selects a file.
  *
  * @param {string} currentDir - The current directory path.
  * @returns {Promise<string>} - The selected file path.
  */
+
+import { $, join } from 'bru'
+
 async function navigateAndSelect(currentDir: string): Promise<string> {
   while (true) {
     const contents = []
