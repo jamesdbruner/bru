@@ -1,5 +1,16 @@
-import $ from 'dax'
-import { ensureDir, log } from 'bru'
+import {
+  $,
+  codeFence,
+  createCompletion,
+  dirname,
+  ensureDir,
+  fromFileUrl,
+  instance,
+  log,
+  model,
+  OpenAI,
+  selectFolders,
+} from 'bru'
 import type { DenoPermissionName } from '@/types.ts'
 
 // Available Deno permissions
@@ -120,21 +131,79 @@ async function main() {
     return Deno.exit(1)
   }
 
-  const useTemplate = Deno.args.includes('--template') ||
-    Deno.args.includes('-t')
+  // Determine the absolute path to the current script's directory
+  // go back one directory
+  const scriptDir = dirname(fromFileUrl(import.meta.url)) // go back one directory
+
+  // join then pop off the last directory then join again
+  const modulesDirPath = scriptDir.split('/').slice(0, -1).join('/')
+
+  const moduleDirs = []
+  for await (const dirEntry of Deno.readDir(modulesDirPath)) {
+    if (dirEntry.isDirectory) {
+      moduleDirs.push(dirEntry.name)
+    }
+  }
+
+  const selectedTemplate = await $.select({
+    message: 'Select an existing module as a template:',
+    options: moduleDirs,
+  })
+
+  selectFolders({
+    single: true,
+    currentPath: modulesDirPath,
+  })
+
+  const userPrompt = await $.prompt(
+    'What do you want your new module to do?',
+  )
+
+  const moduleTemplateContent = await Deno.readTextFile(
+    `modules/${moduleDirs[selectedTemplate]}/mod.ts`,
+  )
+
+  const chatCompletionParams: OpenAI.ChatCompletionCreateParams = {
+    model,
+    messages: [
+      {
+        role: 'system',
+        content: `
+          You are an expert Deno module developer. Your task is to create a new Deno module based on the user's requirements and an existing module template.
+
+          Do NOT include any explainations or anything other than valid code and JSDoc comments. The user will be prompted to provide the purpose and functionality of the module. You should only provide the code structure and implementation.
+          Do NOT include any code fences in your response.
+        `,
+      },
+      {
+        role: 'user',
+        content: `
+          Here is an example of an existing modules code:
+
+          ${codeFence(moduleTemplateContent)}
+
+          Based on the above example, create a new module that does the following: ${userPrompt}
+        `,
+      },
+    ],
+    max_tokens: 850,
+    temperature: 0.45,
+  }
+
+  const response = await createCompletion(instance, chatCompletionParams)
   const moduleDirPath = `modules/${moduleName}`
 
   await ensureDir(moduleDirPath)
   await createPermissionsFile(moduleDirPath)
 
   const destinationPath = `${moduleDirPath}/mod.ts`
-  if (useTemplate) {
-    await Deno.copyFile('modules/create_mod/template.ts', destinationPath)
-  } else {
-    await Deno.writeTextFileSync(destinationPath, '')
-  }
+  const generatedModuleContent = String(
+    response?.choices[0]?.message?.content?.trim(),
+  )
 
-  log(`Created %c${moduleName}`, { styles: 'color: green; ' })
+  await Deno.writeTextFile(destinationPath, generatedModuleContent)
+
+  log(`Created %c${moduleName}`, { styles: 'font-weight: bold; ' })
 }
 
 await main()
