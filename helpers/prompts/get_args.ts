@@ -20,7 +20,7 @@
  * });
  */
 
-import $ from 'dax'
+import { $ } from 'bru'
 
 type ArgConfig = {
   arg: string | string[] | undefined

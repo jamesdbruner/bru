@@ -5,8 +5,8 @@
  * @returns A promise that resolves to the permissions object for the module.
  */
 
-import type { DenoPermissions, ModOptions } from '@/types.ts'
 import { log } from 'bru'
+import type { DenoPermissions, ModOptions } from '@/types.ts'
 
 export interface ModulePermissions {
   default: DenoPermissions

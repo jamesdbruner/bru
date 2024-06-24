@@ -7,8 +7,7 @@
  * @returns {Promise<void>}
  */
 
-import { $, log, walk } from 'bru'
-import { ProgressBar } from 'dax'
+import { $, log, ProgressBar, walk } from 'bru'
 
 // Function to process a single file and update the progress bar
 export async function runModule(

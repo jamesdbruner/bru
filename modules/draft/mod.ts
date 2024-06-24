@@ -7,6 +7,7 @@
 import {
   $,
   addFrontmatter,
+  CACHE_PATH,
   checkHashTable,
   codeFence,
   copyCachedFiles,
@@ -22,6 +23,7 @@ import {
   OpenAI,
   processMods,
   readFromCache,
+  readFromConfig,
   relative,
   removeFromCache,
   removeFromHashTable,
@@ -30,9 +32,8 @@ import {
   updateHashTable,
   walkMod,
   writeToCache,
+  writeToConfig,
 } from 'bru'
-import { CACHE_PATH } from 'helpers/caching/cache.ts'
-import { readFromConfig, writeToConfig } from 'helpers/caching/config.ts'
 import { writeStarlightConfig } from './starlight_config.ts'
 
 /**
