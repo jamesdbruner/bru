@@ -6,11 +6,13 @@
  *
  * @export
  * @async
- * @param {string} [currentPath=Deno.cwd()] The directory path where the selection will begin. Defaults to the current working directory.
+ * @param {Object} params - The parameters for the function.
+ * @param {boolean} [params.single=false] - If true, only allow the selection of one directory and immediately return the selection.
+ * @param {string} [params.currentPath=Deno.cwd()] - The directory path where the selection will begin. Defaults to the current working directory.
  * @returns {Promise<string[]>} A promise that resolves to an array of the full paths of the selected directories.
  * Each selected directory's full path is constructed by joining the `currentPath` with the selected directory name.
  * @example
- * selectFolders('/path/to/start').then(selectedPaths => {
+ * selectFolders({ currentPath: '/path/to/start', single: true }).then(selectedPaths => {
  *   console.log('Selected directories:', selectedPaths);
  * }).catch(error => {
  *   console.error('Error selecting folders:', error);
@@ -19,24 +21,22 @@
 
 import { $, join } from 'bru'
 
-interface Entry {
-  text: string
-  value: string
+interface SelectFoldersParams {
+  single?: boolean
+  currentPath?: string
 }
 
-export async function selectFolders(
-  currentPath: string = Deno.cwd(),
-): Promise<string[]> {
-  const entries: Entry[] = []
+export async function selectFolders({
+  single = false,
+  currentPath = Deno.cwd(),
+}: SelectFoldersParams = {}): Promise<string[]> {
+  const entries: string[] = []
 
   // Read the current directory and filter for visible folders only
   for await (const entry of Deno.readDir(currentPath)) {
     // Skip hidden files and folders (those starting with a dot)
     if (entry.isDirectory && !entry.name.startsWith('.')) {
-      entries.push({
-        text: entry.name,
-        value: entry.name,
-      })
+      entries.push(entry.name)
     }
   }
 
@@ -44,17 +44,28 @@ export async function selectFolders(
     throw new Error(`No directories found in ${currentPath}`)
   }
 
-  // Show a multi-select prompt to the user to select directories
-  const selectedIndices = await $.multiSelect({
-    message: `Select at least one directory (${currentPath}):`,
-    options: entries,
-  })
+  if (single) {
+    // Show a select prompt to the user to select one directory
+    const selectedIndex = await $.select({
+      message: `Select a directory (${currentPath}):`,
+      options: entries,
+    })
 
-  // Gather selected folder paths based on indices
-  const selectedFolders = selectedIndices.map((index) => entries[index].value)
+    // Return the full path of the selected folder
+    return [join(currentPath, entries[selectedIndex])]
+  } else {
+    // Show a multi-select prompt to the user to select directories
+    const selectedIndices = await $.multiSelect({
+      message: `Select at least one directory (${currentPath}):`,
+      options: entries,
+    })
 
-  // Return the full paths of selected folders
-  return selectedFolders.map((folder) => join(currentPath, folder))
+    // Gather selected folder paths based on indices
+    const selectedFolders = selectedIndices.map((index) => entries[index])
+
+    // Return the full paths of selected folders
+    return selectedFolders.map((folder) => join(currentPath, folder))
+  }
 }
 
 export default selectFolders
