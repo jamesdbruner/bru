@@ -1,8 +1,11 @@
 // External dependencies
+export type { ProgressBar } from 'dax'
 export { $ } from 'dax'
-export { parse } from 'https://deno.land/x/commit@0.1.5/mod.ts'
-export { writeText } from 'https://deno.land/x/copy_paste@v1.1.3/mod.ts'
 export { assert } from 'https://deno.land/std@0.212.0/assert/mod.ts'
+export { fromFileUrl } from 'https://deno.land/std@0.216.0/path/mod.ts'
+export { OpenAI } from 'openai/mod.ts'
+export { parse } from 'https://deno.land/x/commit@0.1.5/mod.ts'
+export { parse as parseYaml, stringify } from 'jsr:@std/yaml'
 export {
   basename,
   dirname,
@@ -10,13 +13,12 @@ export {
   join,
   relative,
 } from 'https://deno.land/std@0.214.0/path/mod.ts'
-export { OpenAI } from 'openai/mod.ts'
-export { parse as parseYaml, stringify } from 'jsr:@std/yaml'
+export { writeText } from 'https://deno.land/x/copy_paste@v1.1.3/mod.ts'
 
 // Internal utilities
-export { walk } from 'https://deno.land/std@0.221.0/fs/walk.ts'
 export { ensureDir } from 'https://deno.land/std@0.221.0/fs/ensure_dir.ts'
 export { ensureFile, existsSync } from 'https://deno.land/std@0.224.0/fs/mod.ts'
+export { walk } from 'https://deno.land/std@0.221.0/fs/walk.ts'
 
 // Helper functions
 export { default as addFrontmatter } from 'helpers/add_frontmatter.ts'
@@ -29,7 +31,6 @@ export { default as processDirs } from 'helpers/process_dirs.ts'
 export { default as processMods } from 'helpers/process_mods.ts'
 export { default as saveFile } from 'helpers/save_file.ts'
 export { default as select } from 'helpers/select.ts'
-export { default as selectFile } from 'helpers/select_file.ts'
 export { default as snapshot } from 'helpers/snapshot.ts'
 export { default as toCapitalCase } from 'helpers/capital_case.ts'
 export { default as walkMod } from 'helpers/walk_mod.ts'
@@ -45,6 +46,7 @@ export {
 } from 'helpers/caching/cache.ts'
 export {
   checkHashTable,
+  ensureHashTable,
   HASHTABLE_PATH,
   removeFromHashTable,
   updateHashTable,
@@ -57,6 +59,7 @@ export { default as clipboard } from 'helpers/prompts/clipboard.ts'
 export { default as getArgs } from 'helpers/prompts/get_args.ts'
 export { default as overwrite } from 'helpers/prompts/overwrite.ts'
 export { default as saveCopyExit } from 'helpers/prompts/save_copy_exit.ts'
+export { default as selectFile } from './helpers/prompts/select_file.ts'
 export { default as selectFolders } from 'helpers/prompts/select_folders.ts'
 
 // OpenAI functions
