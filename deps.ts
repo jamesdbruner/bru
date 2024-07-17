@@ -19,6 +19,7 @@ export { writeText } from 'https://deno.land/x/copy_paste@v1.1.3/mod.ts'
 export { ensureDir } from 'https://deno.land/std@0.221.0/fs/ensure_dir.ts'
 export { ensureFile, existsSync } from 'https://deno.land/std@0.224.0/fs/mod.ts'
 export { walk } from 'https://deno.land/std@0.221.0/fs/walk.ts'
+export { z } from 'https://deno.land/x/zod@v3.16.1/mod.ts'
 
 // Helper functions
 export { default as addFrontmatter } from 'helpers/add_frontmatter.ts'
