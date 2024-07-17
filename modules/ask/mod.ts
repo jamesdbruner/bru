@@ -10,22 +10,43 @@
  * @returns {Promise<void>} A promise that resolves when the chat loop has completed.
  */
 
-import { chatLoop, getArgs, instance, log, model, OpenAI, stream } from 'bru'
+import {
+  chatLoop,
+  findArg,
+  getArgs,
+  instance,
+  log,
+  model,
+  OpenAI,
+  stream,
+} from 'bru'
 
 export async function ask() {
   const { prompt } = await getArgs({
     prompt: { arg: String(Deno.args.join(' ')), prompt: '[you]:' },
   })
 
+  // concise code mode
+  const code = findArg(Deno.args, '-c') || findArg(Deno.args, '--code')
+
+  const systemMessage =
+    "You're a helpful assistant that can generate a response to the following prompt from a user. You're a CLI tool that can be asked about anything."
+
+  let userMessage = String(prompt).replace(/-c/, '').replace(/--code/, '')
+
+  if (code) {
+    userMessage +=
+      'Only respond with the intended code snippet without any explanation or code fences.'
+  }
+
   const messages: OpenAI.ChatCompletionMessageParam[] = [
     {
       role: 'system',
-      content:
-        "You're a helpful assistant that can generate a response to the following prompt from a user. You're a CLI tool that can be asked about anything.",
+      content: systemMessage,
     },
     {
       role: 'user',
-      content: String(prompt),
+      content: userMessage,
     },
   ]
 

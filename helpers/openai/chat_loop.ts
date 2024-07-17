@@ -20,9 +20,11 @@ async function chatLoop(
     { role: 'system', content: response },
   ]
 
+  console.log('\n')
+
   // Ask user if they want to refine the output
   const confirm = await $.confirm(
-    '\nRespond?',
+    'Respond?',
     { default: true },
   )
 
