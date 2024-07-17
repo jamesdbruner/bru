@@ -9,7 +9,7 @@ import { log, selectFolders } from 'bru'
  */
 async function watchDirs(
   dirs: string[],
-  callback: (path: string, changeCount: number) => Promise<void>,
+  callback: (path: string, changeCount: number) => void,
 ) {
   let changeCount = 0
   const changedFiles = new Set<string>()
@@ -39,7 +39,7 @@ async function watchDirs(
  * @param {number} changeCount - The count of file changes.
  * @returns {Promise<void>}
  */
-async function handleFileChange(path: string, changeCount: number) {
+function handleFileChange(path: string, changeCount: number) {
   // Implement your file change handling logic here
   log(`Changed file: %c${path}`, {
     styles: 'font-weight: bold;color: blue; ',
@@ -55,7 +55,7 @@ export async function main() {
   // Check if the path is a file or a directory
   const stat = await Deno.stat(path)
   if (stat.isDirectory) {
-    await watchDirs([path], handleFileChange)
+    watchDirs([path], handleFileChange)
   } else {
     log('The provided path is not a directory.')
   }
