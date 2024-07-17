@@ -6,9 +6,8 @@
  * @module ModuleInstaller
  */
 
-import { $, getModulePermissions, log, walk } from 'bru'
+import { $, getModulePermissions, log, srcDir, walk } from 'bru'
 
-const src = './modules'
 const timeout = parseInt(Deno.args[0]) || 10
 
 /**
@@ -63,7 +62,7 @@ async function installMods(): Promise<void> {
   const errors: string[] = []
   const skipped: string[] = []
 
-  for await (const entry of walk(src, { maxDepth: 1 })) {
+  for await (const entry of walk(srcDir, { maxDepth: 1 })) {
     if (!entry.isDirectory || entry.name === 'modules') continue
     modules.push(entry.name)
   }
@@ -94,7 +93,7 @@ async function installMods(): Promise<void> {
   }
 
   log(
-    '✓ Installation complete \n\nRun "deno task list" to see available commands',
+    '✅ Installation complete \n\nRun "deno task list" to see available commands',
   )
 }
 

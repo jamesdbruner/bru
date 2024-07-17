@@ -151,4 +151,4 @@ const target = Deno.args.find((arg) => arg.startsWith('--target='))
 
 await compileModules(target)
 
-log('✓ Compilation complete')
+log('✅ Compilation complete')

@@ -113,7 +113,7 @@ async function summarizeDir() {
 
 const { dirs } = await getArgs({ dirs: { arg: Deno.args } })
 
-await processDirs(dirs, summarizeFile, '.ts', `Summarizing files in ${dirs}`)
+await processDirs(dirs, summarizeFile, /.ts/, `Summarizing files in ${dirs}`)
 await summarizeDir()
 
 if (
@@ -123,7 +123,7 @@ if (
 ) {
   try {
     await Deno.remove('./summary.json')
-    log.info('✓ Removed summary.json')
+    log.info('✅ Removed summary.json')
   } catch (error) {
     log.error(`Error removing summary.json: ${error.message}`)
   }

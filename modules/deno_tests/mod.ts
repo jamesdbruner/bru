@@ -74,8 +74,8 @@ await processDirs(
       .map((d) => d.trim())
   ),
   (file: string) => generateTests(file),
-  '.ts',
+  /.ts/,
   `Generating tests in ${dirs}`,
 )
 
-log(`✓ Tests written to ${output}`)
+log(`✅ Tests written to ${output}`)

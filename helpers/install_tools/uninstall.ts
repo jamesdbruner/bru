@@ -61,7 +61,7 @@ async function uninstallAll() {
   }
 
   log(
-    `✓ Uninstall complete \n\nRun "deno task list" to see available commands`,
+    `✅ Uninstall complete \n\nRun "deno task list" to see available commands`,
   )
 }
 

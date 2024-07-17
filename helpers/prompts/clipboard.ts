@@ -13,7 +13,7 @@ async function clipboardPrompt(text: string): Promise<void> {
 
   if (confirm) {
     await writeText(text)
-    log('✓ Copied to clipboard')
+    log('✅ Copied to clipboard')
   }
 }
 
