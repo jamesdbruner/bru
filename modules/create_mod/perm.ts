@@ -8,7 +8,7 @@ export default {
 } as DenoPermissions
 
 export const options = {
-  name: 'cmod',
+  name: 'homebru',
   install: true,
   compile: false,
 } as ModOptions
