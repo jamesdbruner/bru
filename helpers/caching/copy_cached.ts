@@ -12,11 +12,9 @@ import {
   CACHE_PATH,
   dirname,
   ensureDir,
-  existsSync,
-  HASHTABLE_PATH,
+  ensureHashTable,
   join,
   log,
-  parseYaml,
 } from 'bru'
 import type { HashTable } from '@/types.ts'
 
@@ -34,13 +32,7 @@ export async function copyCachedFiles(
     },
   )
 
-  if (!existsSync(HASHTABLE_PATH)) {
-    log.error(`Hash table path does not exist: ${HASHTABLE_PATH}`)
-    return
-  }
-
-  const content = await Deno.readTextFile(HASHTABLE_PATH)
-  const hashTable = parseYaml(content) as HashTable
+  const hashTable: HashTable = await ensureHashTable()
 
   const relativeDirs = selectedDirs.map((dir) =>
     dir.replace(Deno.cwd(), '').replace(/^\//, '')
@@ -62,7 +54,8 @@ export async function copyCachedFiles(
 
               try {
                 await ensureDir(dirname(destPath))
-                await Deno.copyFile(srcPath, destPath)
+                await ensureDir(join(path, dir, subdir))
+                await Deno.copyFile(`${srcPath}/${file}`, destPath)
               } catch (error) {
                 if (error instanceof Deno.errors.NotFound) {
                   log.error(`File not found: ${srcPath}`)
