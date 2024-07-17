@@ -282,6 +282,6 @@ async function main(cacheRemoveFileName?: string) {
   }
 }
 
-const fileName = findArg(Deno.args, '--cache-remove=')
+const fileName = findArg(Deno.args, '--cache-remove=') as string
 
 await main(fileName)
