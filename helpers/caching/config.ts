@@ -8,7 +8,7 @@ const CACHE_PATH = './.cache'
 interface Config {
   cloneDir?: string
   template?: string | void
-  outputDir?: string
+  dirName?: string
   selectedDirs?: string[]
   manager?: 'yarn' | 'npm' | 'pnpm'
 }
