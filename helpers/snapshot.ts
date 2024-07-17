@@ -17,13 +17,13 @@ import { relative, walk } from 'bru'
 async function snapshot(
   basePath: string,
   depth = 2,
-  ignorePatterns: string[] = [],
+  ignore: string[] = [],
   maxLines = 25,
 ): Promise<string> {
   let structure = `Snapshot of '${basePath}' (depth: ${depth})\n\n`
   let lineCount = 0
 
-  const skipRegexes = ignorePatterns.map((pattern) => new RegExp(pattern))
+  const skipRegexes = ignore.map((pattern) => new RegExp(pattern))
   const walkOptions = { maxDepth: depth, skip: skipRegexes }
 
   for await (const entry of walk(basePath, walkOptions)) {
