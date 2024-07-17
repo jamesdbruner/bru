@@ -34,6 +34,10 @@ using simple project tasks
 **Permission Management:** Define module permissions upfront in a `perm.ts`
 file, streamlining installation and execution without runtime prompts
 
+**OpenAI Helpers:** Common utilities for interacting with the OpenAI API,
+including chat, completion, and summarization modules. These modules are
+examples and can be expanded upon or replaced with your own helpers.
+
 ## Install
 
 If you haven't already,
