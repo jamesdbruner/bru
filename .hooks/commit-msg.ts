@@ -36,7 +36,7 @@ try {
     Deno.exit(1)
   }
 
-  log('✓ Conventional commit')
+  log('✅ Conventional commit')
 } catch (error) {
   log.error(`Error reading commit message: ${error.message}`)
   Deno.exit(1)
