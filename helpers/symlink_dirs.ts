@@ -12,25 +12,22 @@ export async function linkDirs(
   dirs: string[],
   outputDir: string,
 ) {
-  const progressBar = $.progress('Linking dirs...', {
+  const progressBar = $.progress('Symlinking dirs...', {
     length: dirs.length,
   })
-
-  log(`Linking dirs to ${outputDir}`)
 
   try {
     await progressBar.with(async () => {
       for (const dir of dirs) {
         try {
-          log(`Linking ${dir} to ${outputDir}`)
           await Deno.symlink(dir, outputDir)
         } catch (error) {
           if (error instanceof Deno.errors.NotFound) {
             log.error(`Directory not found: ${dir}`)
           } else if (error instanceof Deno.errors.AlreadyExists) {
-            log.error(`Link already exists: ${outputDir}`)
+            log.error(`Symlink already exists: ${outputDir}`)
           } else {
-            log.error(`Error linking ${dir} to ${outputDir}: ${error}`)
+            log.error(`Error symlinking ${dir} to ${outputDir}: ${error}`)
             throw error
           }
         }
@@ -38,7 +35,7 @@ export async function linkDirs(
       }
     })
   } catch (error) {
-    log.error(`Error linking dirs: ${error}`)
+    log.error(`Error symlinking dirs: ${error}`)
   } finally {
     progressBar.finish()
   }
