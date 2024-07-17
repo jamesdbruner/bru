@@ -72,7 +72,7 @@ export async function main() {
   } else if (stat.isDirectory) {
     await processDirs(
       [path],
-      jsdoc, // Pass function directly
+      jsdoc,
       /.ts/,
       `Generating JSDoc comments in ${path}`,
     )
