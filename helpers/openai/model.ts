@@ -1,1 +1,1 @@
-export default 'gpt-4o'
+export default 'gpt-4o-mini'
