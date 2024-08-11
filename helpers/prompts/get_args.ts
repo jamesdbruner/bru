@@ -22,7 +22,7 @@
 
 import { $ } from 'bru'
 
-type ArgConfig = {
+export type ArgConfig = {
   arg: string | string[] | undefined
   prompt?: string
 }

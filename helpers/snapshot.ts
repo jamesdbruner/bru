@@ -15,7 +15,7 @@
 import { relative, walk } from 'bru'
 
 async function snapshot(
-  basePath: string,
+  basePath: string = Deno.cwd(),
   depth = 2,
   ignore: string[] = [],
   maxLines = 25,

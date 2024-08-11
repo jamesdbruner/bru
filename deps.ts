@@ -34,7 +34,7 @@ export { default as saveFile } from 'helpers/save_file.ts'
 export { default as select } from 'helpers/select.ts'
 export { default as snapshot } from 'helpers/snapshot.ts'
 export { default as toCapitalCase } from 'helpers/capital_case.ts'
-export { default as walkMod } from 'helpers/walk_mod.ts'
+export { collectAllFiles, default as walkMod } from 'helpers/walk_mod.ts'
 
 export { binDir, denoBin, denoDir, homeDir, srcDir } from 'helpers/constants.ts'
 
