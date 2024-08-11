@@ -6,33 +6,27 @@
  *
  * @async
  * @function ask
- * @description Initiates an OpenAI chat session, streaming responses to stdout.
- * @returns {Promise<void>} A promise that resolves when the chat loop has completed.
+ * @description Initiates an OpenAI chat session, streaming responses to stdout or returning the result.
+ * @param {string} [initialPrompt] - An optional prompt to start the session.
+ * @param {boolean} [interactive=true] - Whether to run interactively (with chat loop) or return the response directly.
+ * @returns {Promise<void | string>} A promise that resolves when the chat loop has completed or returns the response directly.
  */
 
-import {
-  chatLoop,
-  findArg,
-  getArgs,
-  instance,
-  log,
-  model,
-  OpenAI,
-  stream,
-} from 'bru'
+import { chatLoop, getArgs, instance, log, model, OpenAI, stream } from 'bru'
 
-export async function ask() {
-  const { prompt } = await getArgs({
+export async function ask(
+  initialPrompt?: string,
+  code?: boolean,
+  interactive: boolean = false,
+): Promise<void | string> {
+  const promptArg = initialPrompt || (await getArgs({
     prompt: { arg: String(Deno.args.join(' ')), prompt: '[you]:' },
-  })
-
-  // concise code mode
-  const code = findArg(Deno.args, '-c') || findArg(Deno.args, '--code')
+  })).prompt
 
   const systemMessage =
     "You're a helpful assistant that can generate a response to the following prompt from a user. You're a CLI tool that can be asked about anything."
 
-  let userMessage = String(prompt).replace(/-c/, '').replace(/--code/, '')
+  let userMessage = String(promptArg).replace(/-c/, '').replace(/--code/, '')
 
   if (code) {
     userMessage +=
@@ -40,14 +34,8 @@ export async function ask() {
   }
 
   const messages: OpenAI.ChatCompletionMessageParam[] = [
-    {
-      role: 'system',
-      content: systemMessage,
-    },
-    {
-      role: 'user',
-      content: userMessage,
-    },
+    { role: 'system', content: systemMessage },
+    { role: 'user', content: userMessage },
   ]
 
   const chatCompletionParams: OpenAI.ChatCompletionCreateParamsStreaming = {
@@ -58,8 +46,24 @@ export async function ask() {
 
   log('\n', { name: 'ai' })
 
-  const response = await stream(instance, chatCompletionParams)
-  await chatLoop(messages, response)
+  if (interactive) {
+    const response = await stream(instance, chatCompletionParams)
+    await chatLoop(messages, response)
+  } else {
+    const response = await stream(instance, chatCompletionParams)
+    let result = ''
+    for await (const chunk of response) {
+      result += chunk
+    }
+    return result
+  }
 }
 
-ask()
+if (import.meta.main) {
+  const code: boolean = Boolean(JSON.parse(Deno.args[1]))
+
+  await ask(
+    Deno.args[0] || '',
+    code,
+  )
+}

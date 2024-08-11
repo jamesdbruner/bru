@@ -9,4 +9,5 @@ export const options = {
   name: 'bls', // bru list
   install: true,
   compile: true,
+  ui: true,
 } as ModOptions

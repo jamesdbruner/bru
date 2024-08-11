@@ -1,3 +1,4 @@
+import type { DenoPermissionName } from '@/types.ts'
 import {
   $,
   codeFence,
@@ -11,7 +12,6 @@ import {
   OpenAI,
   selectFolders,
 } from 'bru'
-import type { DenoPermissionName } from '@/types.ts'
 
 // Available Deno permissions
 const denoPermissions: DenoPermissionName[] = [
@@ -26,7 +26,7 @@ const denoPermissions: DenoPermissionName[] = [
 ]
 
 // Available module options
-const moduleOptions = ['install', 'compile']
+const moduleOptions = ['install', 'compile', 'ui']
 
 /**
  * Prompts the user for required permissions and generates a perm.ts file.

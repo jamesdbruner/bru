@@ -7,6 +7,7 @@ const CACHE_PATH = './.cache'
  */
 interface Config {
   cloneDir?: string
+  outputDir?: string
   template?: string | void
   dirName?: string
   selectedDirs?: string[]

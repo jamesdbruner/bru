@@ -1,13 +1,16 @@
-> **⚠️ DISCLAIMER**: bru is an open source proof of concept and in active
+<!--deno-fmt-ignore-start-->
+> [!IMPORTANT]
+> bru is an open source proof of concept and in active
 > development. It is **not** intended for production use and comes with no
 > guarantees. I haven't benchmarked anything and realistically we're running
 > javascript here. Which is to say that for a lot of scenarios this could be a
 > fine option and you could potentially even just uses Deno's FFI to offload
 > lower level tasks that require more performant means of execution but if
 > performance is your highest priority then I would start elsewhere
+<!--deno-fmt-ignore-end-->
 
 ![Deno](https://img.shields.io/badge/-Deno-black?style=flat-square&logo=deno)
-![Deno Version](https://img.shields.io/badge/v1.41.0-black)
+![Deno Version](https://img.shields.io/badge/v1.45.5-black)
 
 **bru** is a template for developing and managing cross-platform (MacOs, Linux
 and Windows) [Deno](https://deno.com/) commands and modules, name inspired by
@@ -220,7 +223,9 @@ installation instructions and cloned this repo down already
 | `deno task list`         | Displays a list of globally installed Deno modules                                          |
 | `deno task install`      | Installs modules, applying permissions from respective `perm.ts` files in `<root>/modules/` |
 | `deno task uninstall`    | Removes installed modules from `~/.deno/` that exist in `<root>/modules/`                   |
+| `deno task reinstall`    | Reinstalls all modules, by first running `deno task uninstall` and then `deno task install` |
 | `deno task compile_mods` | Compiles all modules into executables for [macOS, Linux, Windows] in `bru/.bin`             |
+| `deno task ui`           | Starts the backend and frontend servers for the UI, viewable on localhost:3000              |
 
 ## Contributions
 
