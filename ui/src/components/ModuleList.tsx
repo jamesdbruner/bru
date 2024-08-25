@@ -3,10 +3,10 @@ import type { ModuleInput } from '@/types.ts';
 import { useState, useEffect } from 'react';
 import { ChevronRightIcon, ArrowUturnLeftIcon } from '@heroicons/react/20/solid';
 import { getModules } from '../api/modules.ts';
+import { formatResponse } from '../utils/formatResponse.tsx';
 import Modal from './Modal.tsx';
 import InputModal from './InputModal.tsx';
 import CopyButton from './CopyButton.tsx'
-import { formatResponse } from '../utils/formatResponse.tsx';
 
 interface Module {
   name: string;

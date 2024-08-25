@@ -6,10 +6,7 @@ import {
   TransitionChild,
 } from '@headlessui/react';
 import {
-  ChartBarSquareIcon,
-  Cog6ToothIcon,
   FolderIcon,
-  WrenchScrewdriverIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { Bars3Icon } from '@heroicons/react/20/solid';
