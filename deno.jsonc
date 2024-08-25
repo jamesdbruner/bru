@@ -26,7 +26,7 @@
     "compile_linux": "deno run --allow-write --allow-read --allow-run=deno --allow-env ./helpers/install_tools/compile.ts --target=x86_64-unknown-linux-gnu",
     "compile_windows": "deno run --allow-write --allow-read --allow-run=deno --allow-env ./helpers/install_tools/compile.ts --target=x86_64-pc-windows-msvc",
     "compile_mods": "deno task compile_linux && deno task compile_mac && deno task compile_windows",
-    "ui": "ui_server & cd ui && pnpm dev"
+    "ui": "ui_server & cd ui && ( [ -d node_modules ] || pnpm install ) && pnpm dev"
   },
   "fmt": {
     "options": {
