@@ -42,7 +42,8 @@ export async function walkMod(
   message: string = `Walking ${dir}`,
 ) {
   const files = await collectAllFiles(dir, ext, skipFiles)
-  const length = files.length - skipFiles.length
+  const { length } = files
+
   const pb = $.progress(message, { length })
 
   await pb.with(async () => {
