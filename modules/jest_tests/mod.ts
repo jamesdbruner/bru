@@ -10,7 +10,7 @@ import {
   instance,
   log,
   model,
-  OpenAI,
+  type OpenAI,
   selectFile,
   selectFolders,
   walkMod,
@@ -85,14 +85,20 @@ async function main() {
     return
   }
 
+  const dir = selectedDirs[0]
+  const run = async (filePath: string) => {
+    await generateJestTests(filePath, fileRef)
+  }
+  const ext = /.ts$/
+  const skipFiles = ['node_modules', '.git', 'dist', 'build', /\.test\.ts$/]
+  const message = 'Generating Jest tests'
+
   await walkMod(
-    selectedDirs[0],
-    async (filePath) => {
-      await generateJestTests(filePath, fileRef)
-    },
-    /.ts$/,
-    ['node_modules', '.git', 'dist', 'build'],
-    'Generating jest tests',
+    dir,
+    run,
+    ext,
+    skipFiles,
+    message,
   )
 }
 

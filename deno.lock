@@ -49,8 +49,7 @@
       "npm:eslint@^8.46.0": "npm:eslint@8.57.0",
       "npm:happy-dom@^12.1.6": "npm:happy-dom@12.10.3",
       "npm:openai": "npm:openai@4.61.0",
-      "npm:openai-node": "npm:openai-node@1.0.5",
-      "npm:openai-node@1.0.5": "npm:openai-node@1.0.5",
+      "npm:openai@4.61.0": "npm:openai@4.61.0",
       "npm:postcss@8.4.21": "npm:postcss@8.4.21",
       "npm:prettier@2.8.2": "npm:prettier@2.8.2",
       "npm:react-dom@18.2.0": "npm:react-dom@18.2.0_react@18.2.0",
@@ -3422,12 +3421,6 @@
         "integrity": "sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==",
         "dependencies": {
           "mimic-fn": "mimic-fn@4.0.0"
-        }
-      },
-      "openai-node@1.0.5": {
-        "integrity": "sha512-DFHdyrbU2E+OKZHfR038XNuOZBr8MiU7n7QLUqGkEHNTXtDtTNaPTHs3kkbk7PQQPev6eSbuQIAvBmS+QoOeXw==",
-        "dependencies": {
-          "request": "request@2.88.2"
         }
       },
       "openai@4.61.0": {
