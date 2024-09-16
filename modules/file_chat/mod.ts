@@ -12,7 +12,7 @@ import {
   instance,
   log,
   model,
-  OpenAI,
+  type OpenAI,
   selectFile,
   snapshot,
   stream,
@@ -53,7 +53,9 @@ const ignoreList = [
   '.bin',
 ]
 
-if (includeSnapshot) {
+const includedSnapshot = includeSnapshot[0] === 'y' ? true : false
+
+if (includedSnapshot) {
   cwd = await snapshot(
     String(snapshotPath),
     parseInt(String(snapshotDepth)),
@@ -73,7 +75,7 @@ const messages: OpenAI.ChatCompletionMessageParam[] = [
     role: 'user',
     content: `File contents: "${file}": \n ${codeFence(contents)}`,
   },
-  ...(includeSnapshot
+  ...(includedSnapshot
     ? [{
       role: 'user' as const,
       content: `Directory structure: \n ${codeFence(cwd)}`,

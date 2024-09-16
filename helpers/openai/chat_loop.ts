@@ -9,7 +9,7 @@
  * @returns {Promise<void>} A promise that resolves when the chat loop completes or the response is saved and the process exits.
  */
 
-import { $, chat, OpenAI, saveCopyExit } from 'bru'
+import { $, chat, type OpenAI, saveCopyExit } from 'bru'
 
 async function chatLoop(
   messages: OpenAI.ChatCompletionMessageParam[],

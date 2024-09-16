@@ -10,7 +10,7 @@ export {
   join,
   relative,
 } from '@std/path'
-export { OpenAI } from 'openai'
+export { OpenAI } from 'npm:openai@4.61.0'
 export { parse } from 'commit'
 export { parse as parseYaml, stringify } from '@std/yaml'
 export { default as clipboardy } from 'clipboardy'
