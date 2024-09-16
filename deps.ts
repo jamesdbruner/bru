@@ -1,25 +1,20 @@
 // External dependencies
 export type { ProgressBar } from 'dax'
 export { $ } from 'dax'
-export { assert } from 'https://deno.land/std@0.212.0/assert/mod.ts'
-export { fromFileUrl } from 'https://deno.land/std@0.216.0/path/mod.ts'
-export { OpenAI } from 'openai/mod.ts'
-export { parse } from 'https://deno.land/x/commit@0.1.5/mod.ts'
-export { parse as parseYaml, stringify } from 'jsr:@std/yaml'
+export { assert } from '@std/assert'
 export {
   basename,
   dirname,
   extname,
+  fromFileUrl,
   join,
   relative,
-} from 'https://deno.land/std@0.214.0/path/mod.ts'
-export { writeText } from 'https://deno.land/x/copy_paste@v1.1.3/mod.ts'
-
-// Internal utilities
-export { ensureDir } from 'https://deno.land/std@0.221.0/fs/ensure_dir.ts'
-export { ensureFile, existsSync } from 'https://deno.land/std@0.224.0/fs/mod.ts'
-export { walk } from 'https://deno.land/std@0.221.0/fs/walk.ts'
-export { z } from 'https://deno.land/x/zod@v3.16.1/mod.ts'
+} from '@std/path'
+export { OpenAI } from 'openai'
+export { parse } from 'commit'
+export { parse as parseYaml, stringify } from '@std/yaml'
+export { default as clipboardy } from 'clipboardy'
+export { ensureDir, ensureFile, existsSync, walk } from '@std/fs'
 
 // Helper functions
 export { default as addFrontmatter } from 'helpers/add_frontmatter.ts'
@@ -36,6 +31,7 @@ export { default as snapshot } from 'helpers/snapshot.ts'
 export { default as toCapitalCase } from 'helpers/capital_case.ts'
 export { collectAllFiles, default as walkMod } from 'helpers/walk_mod.ts'
 
+// Helper Constants
 export { binDir, denoBin, denoDir, homeDir, srcDir } from 'helpers/constants.ts'
 
 // Caching helpers
