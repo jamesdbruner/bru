@@ -41,8 +41,7 @@
       "npm:clipboardy": "npm:clipboardy@4.0.0",
       "npm:clipboardy@4.0.0": "npm:clipboardy@4.0.0",
       "npm:conventional-commits-parser@6.0.0": "npm:conventional-commits-parser@6.0.0",
-      "npm:dotenv": "npm:dotenv@16.3.1",
-      "npm:dotenv@16.3.1": "npm:dotenv@16.3.1",
+      "npm:dotenv@16.4.5": "npm:dotenv@16.4.5",
       "npm:eslint-plugin-import@2.27.4": "npm:eslint-plugin-import@2.27.4_eslint@8.57.0",
       "npm:eslint-plugin-react-hooks@^4.6.0": "npm:eslint-plugin-react-hooks@4.6.2_eslint@8.57.0",
       "npm:eslint-plugin-react-refresh@^0.4.3": "npm:eslint-plugin-react-refresh@0.4.12_eslint@8.57.0",
@@ -1853,8 +1852,8 @@
           "is-obj": "is-obj@2.0.0"
         }
       },
-      "dotenv@16.3.1": {
-        "integrity": "sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==",
+      "dotenv@16.4.5": {
+        "integrity": "sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==",
         "dependencies": {}
       },
       "ecc-jsbn@0.1.2": {
@@ -5186,7 +5185,7 @@
       "jsr:@std/yaml@1.0.5",
       "npm:@commitlint/parse@19.5.0",
       "npm:clipboardy@4.0.0",
-      "npm:dotenv",
+      "npm:dotenv@16.4.5",
       "npm:openai"
     ],
     "members": {

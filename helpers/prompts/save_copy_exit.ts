@@ -8,7 +8,7 @@
  * @param {OpenAI.ChatCompletionMessageParam | string} message - The message or string that triggers the SaveCopyExit.
  */
 
-import { clipboard, OpenAI, saveFile, select } from 'bru'
+import { clipboard, type OpenAI, saveFile, select } from 'bru'
 
 async function SaveCopyExit(
   message: OpenAI.ChatCompletionMessageParam | string,

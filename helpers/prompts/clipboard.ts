@@ -12,7 +12,7 @@ async function clipboardPrompt(text: string): Promise<void> {
   })
 
   if (confirm) {
-    await clipboardy.writeSync(text)
+    await clipboardy.write(text)
     log('✅ Copied to clipboard')
   }
 }

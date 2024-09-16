@@ -12,7 +12,15 @@
  * @returns {Promise<void | string>} A promise that resolves when the chat loop has completed or returns the response directly.
  */
 
-import { chatLoop, getArgs, instance, log, model, OpenAI, stream } from 'bru'
+import {
+  chatLoop,
+  getArgs,
+  instance,
+  log,
+  model,
+  type OpenAI,
+  stream,
+} from 'bru'
 
 export async function ask(
   initialPrompt?: string,
@@ -60,7 +68,7 @@ export async function ask(
 }
 
 if (import.meta.main) {
-  const code: boolean = Boolean(JSON.parse(Deno.args[1]))
+  const code: boolean = Deno.args[1] ? Boolean(JSON.parse(Deno.args[1])) : false
 
   await ask(
     Deno.args[0] || '',
