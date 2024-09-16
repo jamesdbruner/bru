@@ -4,7 +4,7 @@
  * @returns {Promise<void>} A Promise that resolves when the action has been completed
  */
 
-import { $, log, writeText } from 'bru'
+import { $, clipboardy, log } from 'bru'
 
 async function clipboardPrompt(text: string): Promise<void> {
   const confirm = await $.confirm('Copy to clipboard?', {
@@ -12,7 +12,7 @@ async function clipboardPrompt(text: string): Promise<void> {
   })
 
   if (confirm) {
-    await writeText(text)
+    await clipboardy.writeSync(text)
     log('✅ Copied to clipboard')
   }
 }

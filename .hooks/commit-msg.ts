@@ -9,7 +9,7 @@ if (!commit) {
 
 try {
   const commitMsg = await Deno.readTextFile(commit)
-  const parsedCommit = parse(commitMsg.replace('!', ''))
+  const parsedCommit = await parse(commitMsg.replace('!', ''))
 
   let errorMessage = ''
 

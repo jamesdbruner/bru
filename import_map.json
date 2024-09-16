@@ -1,13 +1,18 @@
 {
   "imports": {
-    "bru": "./deps.ts",
     "@/": "./",
+    "bru": "./deps.ts",
+    "env": "./env.ts",
     "helpers/": "./helpers/",
-    "openai": "https://deno.land/x/openai@v4.20.1/mod.ts",
-    "openai/": "https://deno.land/x/openai@v4.20.1/",
-    "dax": "https://deno.land/x/dax@0.35.0/mod.ts",
-    "fs": "https://deno.land/std@0.208.0/fs/mod.ts",
-    "dotenv": "https://deno.land/x/dotenv@v3.2.2/mod.ts",
-    "env": "./env.ts"
+    "log": "./helpers/log.ts",
+    "dax": "jsr:@david/dax@^0.41.0",
+    "@std/yaml": "jsr:@std/yaml@1.0.5",
+    "@std/fs": "jsr:@std/fs@1.0.3",
+    "@std/assert": "jsr:@std/assert@0.215.0",
+    "@std/path": "jsr:@std/path@1.0.6",
+    "commit": "npm:@commitlint/parse@19.5.0",
+    "clipboardy": "npm:clipboardy@4.0.0",
+    "openai": "npm:openai",
+    "dotenv": "npm:dotenv"
   }
 }

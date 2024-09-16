@@ -7,7 +7,8 @@
  * @returns {Promise<void>}
  */
 
-import { $, log, ProgressBar, walk } from 'bru'
+import type { ProgressBar } from 'bru'
+import { $, log, walk } from 'bru'
 
 // Function to process a single file and update the progress bar
 export async function runModule(
@@ -38,7 +39,7 @@ export async function walkMod(
   dir: string,
   run: (mod: string) => Promise<void>,
   ext: RegExp = /\.tsx?$/,
-  skipFiles: string[] = ['perm.ts'],
+  skipFiles: (string | RegExp)[] = ['perm.ts'],
   message: string = `Walking ${dir}`,
 ) {
   const files = await collectAllFiles(dir, ext, skipFiles)
@@ -54,18 +55,38 @@ export async function walkMod(
 }
 
 /**
+ * Utility function to determine if a file should be skipped.
+ *
+ * @param {string} fileName - The name of the file to check.
+ * @param {Array<string | RegExp>} skipPatterns - The list of patterns to skip (strings or regex).
+ * @returns {boolean} - Returns true if the file should be skipped.
+ */
+export function shouldSkip(
+  fileName: string,
+  skipPatterns: Array<string | RegExp>,
+): boolean {
+  return skipPatterns.some((pattern) => {
+    if (typeof pattern === 'string') {
+      return pattern === fileName
+    } else if (pattern instanceof RegExp) {
+      return pattern.test(fileName)
+    }
+    return false
+  })
+}
+
+/**
  * Collects all files in a directory matching the provided extension and excluding specific files.
  *
  * @param {string} dir - The directory to search.
- * @param {RegEx} ext - The file extension regex to match.
- * @param {string[]} skipFiles - The files to exclude.
+ * @param {RegExp} ext - The file extension regex to match.
+ * @param {Array<string | RegExp>} skipFiles - The files or patterns to exclude.
  * @returns {Promise<string[]>} - A promise that resolves to a list of file paths.
  */
-
 export async function collectAllFiles(
   dir: string,
   ext: RegExp,
-  skipFiles: string[],
+  skipFiles: Array<string | RegExp>,
 ): Promise<string[]> {
   const files: string[] = []
   for await (
@@ -73,7 +94,7 @@ export async function collectAllFiles(
       match: [ext],
     })
   ) {
-    if (entry.isFile && !skipFiles.includes(entry.name)) {
+    if (entry.isFile && !shouldSkip(entry.name, skipFiles)) {
       files.push(entry.path)
     }
   }
