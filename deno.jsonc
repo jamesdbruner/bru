@@ -1,6 +1,6 @@
 {
   "name": "@jamesbruner/bru",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "exports": "./main.ts",
   "imports": {
     "@/": "./",
