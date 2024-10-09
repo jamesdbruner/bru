@@ -4,7 +4,7 @@ import {
   instance,
   log,
   model,
-  OpenAI,
+  type OpenAI,
   processDirs,
   saveCopyExit,
   saveFile,

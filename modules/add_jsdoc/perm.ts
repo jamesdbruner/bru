@@ -9,7 +9,7 @@ export const options = {
   name: 'jsdoc',
   install: true,
   compile: false,
-  ui: true,
+  ui: false,
   inputs: [
     {
       name: 'path',

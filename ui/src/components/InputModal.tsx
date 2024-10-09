@@ -1,6 +1,9 @@
 import type { ModuleInput } from '@/types.ts';
 import React, { useState, useEffect } from 'react';
 import { ArrowTurnRightUpIcon } from '@heroicons/react/24/outline';
+import { useHotkeys } from 'react-hotkeys-hook';
+
+import Select from './Select.tsx';
 import Switch from './Switch.tsx';
 
 interface InputModalProps {
@@ -10,6 +13,8 @@ interface InputModalProps {
 
 const InputModal: React.FC<InputModalProps> = ({ inputs, onSubmit }: InputModalProps) => {
   const [formValues, setFormValues] = useState<Record<string, string | number | boolean>>({});
+
+  useHotkeys('shift+enter', () => handleSubmit());
 
   useEffect(() => {
     if (inputs?.length) {
@@ -81,16 +86,28 @@ const InputModal: React.FC<InputModalProps> = ({ inputs, onSubmit }: InputModalP
               onChange={(value: boolean) => handleToggle(input.name, value)}
             />
           )}
+          {input.type === 'select' && input.options && (
+            <Select
+              name={input.name}
+              options={input.options.map((option) => ({ value: option, label: option }))}
+              multiple={input?.multiple || false}
+              value={formValues[input.name]}
+              onChange={(value) => handleChange(input.name, value)}
+            />
+          )}
         </div>
       ))}
       <div className="mt-7 flex gap-4">
         <button
           type="button"
           onClick={handleSubmit}
-          className="inline-flex ml-auto justify-center rounded-md bg-slate-700 border-slate-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+          className="relative group inline-flex ml-auto justify-center rounded-md bg-slate-700 border-slate-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 outline-none"
         >
           <span className="inline">Enter</span>
           <ArrowTurnRightUpIcon className="w-[16px] ml-[5px] mt-[1px]" size={16} />
+          <span className="bg-black p-2 rounded-lg text-xs pointer-events-none absolute z-20 -top-9 right-9 w-max opacity-0 transition-opacity group-focus:opacity-100 group-hover:opacity-100">
+            shift + ↵
+          </span>
         </button>
       </div>
     </div>

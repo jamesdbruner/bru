@@ -5,6 +5,7 @@
   "homepage": "https://github.com/jamesdbruner/bru",
   "author": "James Bruner <jamesdbruner@gmail.com>",
   "license": "MIT",
+  "main": "./out/main/main.js",
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -15,18 +16,21 @@
     "yarn": ">=1.22.5"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "ui_dev": "vite dev",
     "test": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "prebuild": "electron-vite build"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "2.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "react-hotkeys-hook": "^4.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "17.4.2",
@@ -41,6 +45,8 @@
     "@typescript-eslint/parser": "^6.2.1",
     "@vitejs/plugin-react": "^4.0.4",
     "autoprefixer": "10.4.13",
+    "electron": "^32.1.2",
+    "electron-vite": "^2.3.0",
     "eslint": "^8.46.0",
     "eslint-plugin-import": "2.27.4",
     "eslint-plugin-react": "7.32.0",

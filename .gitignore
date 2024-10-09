@@ -9,6 +9,8 @@ lcov.info
 temp
 node_modules/
 vendor/
+ui/out/
+ui/public/
 
 # MacOS generated files
 .DS_Store

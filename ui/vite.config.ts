@@ -27,5 +27,8 @@ export default defineConfig((configEnv: any) => {
           : '[hash:base64:5]',
       },
     },
+    build: {
+      outDir: 'dist',
+    },
   }
 })

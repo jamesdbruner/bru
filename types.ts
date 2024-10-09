@@ -42,8 +42,10 @@ export interface ModOptions {
  */
 export interface ModuleInput {
   name: string
-  type: 'text' | 'textarea' | 'number' | 'toggle' | 'folder'
+  type: 'text' | 'textarea' | 'number' | 'toggle' | 'folder' | 'select'
   prompt: string
+  options?: string[]
+  multiple?: boolean
   defaultValue: string | number | boolean | undefined
   description?: string
 }
